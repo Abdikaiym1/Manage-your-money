@@ -5,6 +5,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.KeyEvent;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.DatePicker;
@@ -17,6 +18,8 @@ public class SecondActivity extends AppCompatActivity  {
     private Toolbar toolbar;
     private Calendar calendar;
     private EditText editText;
+    private String stringMoney;
+    private String stringDate;
 
 
     @Override
@@ -47,14 +50,24 @@ public class SecondActivity extends AppCompatActivity  {
 
     public void setupTextInput(){
         TextInputLayout inputLayout = (TextInputLayout) findViewById(R.id.text_input);
-        inputLayout.setError("First name is required");
-        inputLayout.setError(null);
+        final EditText editTextOne = (EditText)findViewById(R.id.edit_money);
+        editTextOne.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View view, int i, KeyEvent keyEvent) {
+                if(keyEvent.getAction() == KeyEvent.ACTION_DOWN && (i == KeyEvent.KEYCODE_ENTER)) {
+                    stringMoney = editTextOne.getText().toString();
+                    editTextOne.setText(stringMoney+"dd");
+                }
+                return false;
+            }
+        });
     }
 
     public void setupDateFun() { //simple test for GIT
         editText = (EditText)findViewById(R.id.dateEditText);
         calendar = Calendar.getInstance();
         editText.setText(calendar.get(Calendar.DAY_OF_MONTH)+"-"+calendar.get(Calendar.MONTH)+"-"+calendar.get(Calendar.YEAR));
+        stringDate = editText.getText().toString();
 
         editText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,6 +80,7 @@ public class SecondActivity extends AppCompatActivity  {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
                         editText.setText(i2+"-"+i1+"-"+i);
+                        stringDate = editText.getText().toString();
                         calendar.set(i, i1, i2);
                     }
                 }, year, month, day);
@@ -74,4 +88,6 @@ public class SecondActivity extends AppCompatActivity  {
             }
         });
     }
+
+
 }

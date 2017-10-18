@@ -9,86 +9,108 @@
 
     <android.support.design.widget.CoordinatorLayout
         android:layout_height="match_parent"
-        android:layout_width="match_parent"
-        >
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:layout_marginTop="44dp">
-
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/text_input"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                app:hintTextAppearance="@style/MyHintText"
-                android:layout_marginLeft="32dp"
-                android:layout_marginRight="32dp">
-
-                <EditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Title"
-                    android:theme="@style/EditText"
-                    android:gravity="start|bottom"
-                    android:maxLines="3"
-                    android:inputType="textAutoCorrect|textCapSentences"
-                    />
-
-            </android.support.design.widget.TextInputLayout>
-
-            <RadioGroup
-                android:id="@+id/radioGroup"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_weight="1"
-                android:layout_gravity="center">
-
-                <RadioButton
-                    android:id="@+id/radio_blue"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:text="USD"/>
-
-                <RadioButton
-                    android:id="@+id/radio_green"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:text="EUR"/>
-
-                <RadioButton
-                    android:id="@+id/radio_gray"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="20dp"
-                    android:text="RUB"
-                    android:checked="true" />
-            </RadioGroup>
+        android:layout_width="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/dateEditText"
+            <LinearLayout
+                android:id="@+id/viewOne"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="69dp"
-                android:layout_marginLeft="32dp"
-                android:layout_marginRight="32dp"
-                android:clickable="false"
-                android:cursorVisible="false"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:gravity="center"/>
+                android:layout_height="match_parent"
+                android:layout_weight="0.6"
+                android:orientation="vertical"
+                android:background="#F08080">
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/text_input"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.5"
+                    app:hintTextAppearance="@style/MyHintText"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginRight="32dp">
+
+                        <EditText
+                            android:id="@+id/edit_money"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="@string/title_spend_money"
+                            android:theme="@style/EditText"
+                            android:layout_weight="0.5"
+                            android:inputType="number" />
+
+                    </android.support.design.widget.TextInputLayout>
+
+                    <RadioGroup
+                        android:id="@+id/radioGroup"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:layout_weight="0.5"
+                        android:layout_gravity="center">
+
+                        <RadioButton
+                            android:id="@+id/radio_blue"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:text="USD"/>
+
+                        <RadioButton
+                            android:id="@+id/radio_green"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:text="EUR"/>
+
+                        <RadioButton
+                            android:id="@+id/radio_gray"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:text="RUB"
+                            android:checked="true" />
+                    </RadioGroup>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="0.4"
+                android:orientation="horizontal">
+
+                <EditText
+                    android:id="@+id/dateEditText"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="20dp"
+                    android:layout_marginLeft="32dp"
+                    android:layout_marginRight="32dp"
+                    android:clickable="false"
+                    android:cursorVisible="false"
+                    android:focusable="false"
+                    android:focusableInTouchMode="false"
+                    android:gravity="center"/>
+
+            </LinearLayout>
 
         </LinearLayout>
 
-    </LinearLayout>
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/fab"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="20dp"
+                android:clickable="true"
+                app:layout_anchor="@id/viewOne"
+                android:src="@drawable/ic_float_send"
+                app:layout_anchorGravity="bottom|right|end"
+                app:backgroundTint="#FFA07A"
+                />
 
     </android.support.design.widget.CoordinatorLayout>
 </LinearLayout>
