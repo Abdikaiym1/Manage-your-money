@@ -9,10 +9,6 @@ import android.support.v4.app.FragmentManager;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by AsusX555L on 17.10.2017.
- */
-
 public class FragmentAdapter extends FragmentPagerAdapter {
     private Context context;
     private final List<Fragment> fragmentList = new ArrayList<>();
@@ -34,5 +30,9 @@ public class FragmentAdapter extends FragmentPagerAdapter {
 
     public void addFragment (Fragment fragment) {
         fragmentList.add(fragment);
+    }
+
+    public Fragment getFragment(int ind) {
+        return fragmentList.get(ind);
     }
 }

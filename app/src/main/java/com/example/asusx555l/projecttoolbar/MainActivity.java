@@ -2,14 +2,21 @@ package com.example.asusx555l.projecttoolbar;
 
 import android.content.Intent;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import com.example.asusx555l.projecttoolbar.beans.Expense;
+import com.example.asusx555l.projecttoolbar.beans.Expense2;
 
 public class MainActivity extends AppCompatActivity {
+
+    FragmentAdapter fragmentAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -31,20 +38,29 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_setting:
                 Intent i = new Intent(this, SecondActivity.class);
-                startActivity(i);
+                //startActivity(i);
+                startActivityForResult(i, SecondActivity.CODE);
                 return true;
             default:
             return super.onOptionsItemSelected(item);
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Fragment fragment = fragmentAdapter.getFragment(0);
+        if (fragment != null) fragment.onActivityResult(requestCode, resultCode, data);
+    }
+
     public void setupFragment () {
-        FragmentAdapter fragmentAdapter = new FragmentAdapter(this, getSupportFragmentManager());
+        fragmentAdapter = new FragmentAdapter(this, getSupportFragmentManager());
         fragmentAdapter.addFragment(new PageFragment());
         fragmentAdapter.addFragment(new SecondPageFragment());
         ViewPager viewPager = (ViewPager)findViewById(R.id.viewPager);
@@ -53,6 +69,6 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(viewPager);
         TabLayout.Tab tabHome = tabLayout.getTabAt(0);
         TabLayout.Tab tabLike = tabLayout.getTabAt(1);
-
     }
+
 }
