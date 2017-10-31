@@ -2,6 +2,7 @@ package com.example.asusx555l.projecttoolbar;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -43,6 +44,7 @@ public class SecondActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_add_date_2);
 
         toolbar = (Toolbar)findViewById(R.id.toolbar);
+        toolbar.setTitleTextColor(Color.WHITE);
         moneyEditText = (EditText) findViewById(R.id.edit_money);
         setSupportActionBar(toolbar);
         if (getSupportActionBar()!=null) {
@@ -78,7 +80,7 @@ public class SecondActivity extends AppCompatActivity  {
                 int month = calendar.get(Calendar.MONTH);
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-                DatePickerDialog pickerDialog = new DatePickerDialog(SecondActivity.this, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog pickerDialog = new DatePickerDialog(SecondActivity.this, R.style.DialogTheme, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
                         editText.setText(i2+"-"+i1+"-"+i);
@@ -96,23 +98,27 @@ public class SecondActivity extends AppCompatActivity  {
         FAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent();
-                int checkedRadioButtonId = radioGroup.getCheckedRadioButtonId();
-                radioButton = (RadioButton) findViewById(checkedRadioButtonId);
+                if (moneyEditText.getText().length() == 0) {
+                    finish();
+                } else {
+                    Intent intent = new Intent();
+                    int checkedRadioButtonId = radioGroup.getCheckedRadioButtonId();
+                    radioButton = (RadioButton) findViewById(checkedRadioButtonId);
 
-                /*Expense2 exp2 = new Expense2();
-                exp2.setDate(editText.getText().toString());
-                exp2.setMoney(Double.valueOf(moneyEditText.getText().toString()));
-                exp2.setCurrency(Expense2.Currency.valueOf(radioButton.getText().toString()));*/
+                    /*Expense2 exp2 = new Expense2();
+                    exp2.setDate(editText.getText().toString());
+                    exp2.setMoney(Double.valueOf(moneyEditText.getText().toString()));
+                    exp2.setCurrency(Expense2.Currency.valueOf(radioButton.getText().toString()));*/
 
-                Expense exp = new Expense();
-                exp.setCurrency(Expense.Currency.valueOf(radioButton.getText().toString()));
-                exp.setDate(editText.getText().toString());
-                exp.setMoney(Double.valueOf(moneyEditText.getText().toString()));
+                    Expense exp = new Expense();
+                    exp.setCurrency(Expense.Currency.valueOf(radioButton.getText().toString()));
+                    exp.setDate(editText.getText().toString());
+                    exp.setMoney(Double.valueOf(moneyEditText.getText().toString()));
 
-                intent.putExtra("exp", exp);
-                setResult(RESULT_OK, intent);
-                finish();
+                    intent.putExtra("exp", exp);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
             }
         });
     }

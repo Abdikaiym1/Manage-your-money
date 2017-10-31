@@ -46,7 +46,8 @@
                            android:layout_height="wrap_content"
                            android:hint="@string/title_spend_money"
                            android:inputType="number"
-                           android:theme="@style/EditText" />
+                           android:theme="@style/EditText"
+                           android:textColor="@color/icons"/>
 
                    </android.support.design.widget.TextInputLayout>
 
@@ -106,10 +107,10 @@
                     android:layout_marginLeft="32dp"
                     android:layout_marginBottom="20dp"
                     android:gravity="center"
-                    android:layout_gravity="center"/>
+                    android:layout_gravity="center"
+                    android:theme="@style/EditTextDate"/>
 
             </FrameLayout>
-
         </LinearLayout>
 
         <android.support.design.widget.FloatingActionButton

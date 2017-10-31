@@ -1,6 +1,7 @@
 package com.example.asusx555l.projecttoolbar;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void Toolbar() {
         Toolbar myToolbar = (Toolbar) findViewById(R.id.toolbar);
+        myToolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(myToolbar);
     }
 
@@ -42,9 +44,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.action_setting:
+            case R.id.action_add:
                 Intent i = new Intent(this, SecondActivity.class);
-                //startActivity(i);
                 startActivityForResult(i, SecondActivity.CODE);
                 return true;
             default:
