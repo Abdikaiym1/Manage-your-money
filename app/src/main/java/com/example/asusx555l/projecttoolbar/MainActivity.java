@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    @Override
+    /*@Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:
@@ -51,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
             default:
             return super.onOptionsItemSelected(item);
         }
-    }
+    }*/
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

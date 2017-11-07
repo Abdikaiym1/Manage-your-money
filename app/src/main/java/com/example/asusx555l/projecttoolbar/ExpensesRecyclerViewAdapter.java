@@ -1,28 +1,40 @@
 package com.example.asusx555l.projecttoolbar;
 
 import android.content.Context;
+import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
+import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.asusx555l.projecttoolbar.beans.Expense;
-import com.example.asusx555l.projecttoolbar.beans.Expense2;
 
-import java.util.Date;
+import java.util.Collections;
 import java.util.List;
 
+import static android.support.design.R.styleable.CoordinatorLayout;
 
-public class ExpensesRecyclerViewAdapter extends RecyclerView.Adapter<ExpensesRecyclerViewAdapter.ViewHolder> {
+
+public class ExpensesRecyclerViewAdapter extends RecyclerView.Adapter<ExpensesRecyclerViewAdapter.ViewHolder>
+    implements ItemTouchHelperClass.ItemTouchHelperAdapter {
+
+    private ItemTouchListener itemTouchListener;
+
+    public interface ItemTouchListener {
+        void onItem(Expense mJustDeletedToDoItem, int mIndexOfDeletedToDoItem, List<Expense> listItems);
+    }
 
     private List<Expense> listItems;
     //private List<Expense2> listItems;
     private Context context;
+    private Expense mJustDeletedToDoItem;
+    private int mIndexOfDeletedToDoItem;
 
-    public ExpensesRecyclerViewAdapter(List<Expense> listItems) {
+    public ExpensesRecyclerViewAdapter(List<Expense> listItems, ItemTouchListener itemTouchListener) {
         this.listItems = listItems;
+        this.itemTouchListener = itemTouchListener;
     }
 
     @Override
@@ -48,6 +60,29 @@ public class ExpensesRecyclerViewAdapter extends RecyclerView.Adapter<ExpensesRe
     @Override
     public int getItemCount() {
         return listItems.size();
+    }
+
+    @Override
+    public void onItemMoved(int fromPosition, int toPosition) {
+        if(fromPosition<toPosition){
+            for(int i=fromPosition; i<toPosition; i++){
+                Collections.swap(listItems, i, i+1);
+            }
+        }
+        else{
+            for(int i=fromPosition; i > toPosition; i--){
+                Collections.swap(listItems, i, i-1);
+            }
+        }
+        notifyItemMoved(fromPosition, toPosition);
+    }
+
+    @Override
+    public void onItemRemoved(int position) {
+        mJustDeletedToDoItem =  listItems.remove(position);
+        mIndexOfDeletedToDoItem = position;
+        notifyItemRemoved(position);
+        itemTouchListener.onItem(mJustDeletedToDoItem, mIndexOfDeletedToDoItem, listItems);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
