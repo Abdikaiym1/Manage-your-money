@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 public class Expense implements Serializable {
 
+    public static final String KEY = "Expense";
+
     public enum Currency {
         USD, EUR, RUB
     }
@@ -11,6 +13,7 @@ public class Expense implements Serializable {
     private double money;
     private Currency currency;
     private String date;
+    private boolean spend;
 
     public double getMoney() {
         return money;
@@ -36,4 +39,11 @@ public class Expense implements Serializable {
         this.currency = currency;
     }
 
+    public boolean isSpend() {
+        return spend;
+    }
+
+    public void setSpend(boolean spend) {
+        this.spend = spend;
+    }
 }

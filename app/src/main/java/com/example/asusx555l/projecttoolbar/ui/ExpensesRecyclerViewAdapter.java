@@ -1,20 +1,19 @@
-package com.example.asusx555l.projecttoolbar;
+package com.example.asusx555l.projecttoolbar.ui;
 
 import android.content.Context;
-import android.support.design.widget.Snackbar;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.asusx555l.projecttoolbar.ItemTouchHelperClass;
+import com.example.asusx555l.projecttoolbar.R;
 import com.example.asusx555l.projecttoolbar.beans.Expense;
+import com.example.asusx555l.projecttoolbar.ui.custom.CurrencyTextView;
 
 import java.util.Collections;
 import java.util.List;
-
-import static android.support.design.R.styleable.CoordinatorLayout;
 
 
 public class ExpensesRecyclerViewAdapter extends RecyclerView.Adapter<ExpensesRecyclerViewAdapter.ViewHolder>
@@ -27,7 +26,6 @@ public class ExpensesRecyclerViewAdapter extends RecyclerView.Adapter<ExpensesRe
     }
 
     private List<Expense> listItems;
-    //private List<Expense2> listItems;
     private Context context;
     private Expense mJustDeletedToDoItem;
     private int mIndexOfDeletedToDoItem;
@@ -40,7 +38,7 @@ public class ExpensesRecyclerViewAdapter extends RecyclerView.Adapter<ExpensesRe
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         context = parent.getContext();
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_one_page, parent, false);
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.expense_item, parent, false);
         return new ViewHolder(v);
     }
 
@@ -48,13 +46,11 @@ public class ExpensesRecyclerViewAdapter extends RecyclerView.Adapter<ExpensesRe
     public void onBindViewHolder(ViewHolder holder, int position) {
         Expense exp = listItems.get(position);
         holder.money.setText(String.valueOf(exp.getMoney()));
-        holder.currency.setText(exp.getCurrency().name());
+        holder.money.setCurrencyText(exp.getCurrency().name());
         holder.date.setText(exp.getDate());
 
-        /*Expense2 exp2 = listItems.get(position);
-        holder.money.setText(String.valueOf(exp2.getMoney()));
-        holder.currency.setText("3");
-        holder.date.setText(exp2.getDate());*/
+        holder.date.setTextColor(context.getResources().getColor(exp.isSpend() ? android.R.color.holo_red_dark : android.R.color.holo_green_dark));
+
     }
 
     @Override
@@ -86,14 +82,12 @@ public class ExpensesRecyclerViewAdapter extends RecyclerView.Adapter<ExpensesRe
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView money;
-        public TextView currency;
+        public CurrencyTextView money;
         public TextView date;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            money =  (TextView) itemView.findViewById(R.id.money);
-            currency =  (TextView) itemView.findViewById(R.id.currency);
+            money = itemView.findViewById(R.id.money);
             date =  (TextView) itemView.findViewById(R.id.date);
         }
     }

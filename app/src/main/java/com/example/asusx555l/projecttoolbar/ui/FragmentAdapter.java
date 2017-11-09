@@ -1,4 +1,4 @@
-package com.example.asusx555l.projecttoolbar;
+package com.example.asusx555l.projecttoolbar.ui;
 
 
 import android.content.Context;
@@ -6,12 +6,14 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentManager;
 
+import com.example.asusx555l.projecttoolbar.ui.Fragmets.BasePage;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class FragmentAdapter extends FragmentPagerAdapter {
     private Context context;
-    private final List<Fragment> fragmentList = new ArrayList<>();
+    private final List<BasePage> fragmentList = new ArrayList<>();
 
     public FragmentAdapter (Context context, FragmentManager fragmentManager) {
         super(fragmentManager);
@@ -28,11 +30,11 @@ public class FragmentAdapter extends FragmentPagerAdapter {
         return fragmentList.size();
     }
 
-    public void addFragment (Fragment fragment) {
+    public void addFragment(BasePage fragment) {
         fragmentList.add(fragment);
     }
 
-    public Fragment getFragment(int ind) {
+    public BasePage getFragment(int ind) {
         return fragmentList.get(ind);
     }
 }
