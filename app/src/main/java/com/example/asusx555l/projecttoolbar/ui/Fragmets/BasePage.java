@@ -1,4 +1,4 @@
-package com.example.asusx555l.projecttoolbar.ui.Fragmets;
+package com.example.asusx555l.projecttoolbar.ui.fragmets;
 
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
@@ -6,6 +6,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -63,8 +64,13 @@ public abstract class BasePage extends Fragment implements ExpensesRecyclerViewA
     }
 
     public void addNewExpense(Expense expense) {
-        expenseList.add(0, expense);
+        expenseList.add(expense);
+        Log.e("str", String.valueOf(expenseList.size()));
         mAdapter.notifyDataSetChanged();
     }
 
+    public void getExpense(Expense expense) {
+    }
+
+    ;
 }

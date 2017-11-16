@@ -5,7 +5,7 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.Activities.MainActivity">
+    tools:context=".ui.activities.MainActivity">
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/barLayout"
@@ -17,15 +17,22 @@
         <include layout="@layout/toolbar"/>
     </android.support.design.widget.AppBarLayout>
 
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_above="@+id/tabLayout"
+        android:background="@drawable/shadow_border" />
+
+
     <android.support.design.widget.TabLayout
         android:id="@+id/tabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         app:tabMode="fixed"
-        android:background="?attr/colorPrimary"
         style="@style/TabLayoutStyle">
     </android.support.design.widget.TabLayout>
+
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewPager"

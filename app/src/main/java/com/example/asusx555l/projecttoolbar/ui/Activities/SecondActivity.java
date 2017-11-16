@@ -1,4 +1,4 @@
-package com.example.asusx555l.projecttoolbar.ui.Activities;
+package com.example.asusx555l.projecttoolbar.ui.activities;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
@@ -17,6 +17,9 @@ import android.widget.RadioGroup;
 import com.example.asusx555l.projecttoolbar.R;
 import com.example.asusx555l.projecttoolbar.beans.Expense;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 import java.util.Calendar;
 
 public class SecondActivity extends AppCompatActivity  {
@@ -107,7 +110,7 @@ public class SecondActivity extends AppCompatActivity  {
                     Expense exp = new Expense();
                     exp.setCurrency(Expense.Currency.valueOf(radioButton.getText().toString()));
                     exp.setDate(editText.getText().toString());
-                    exp.setMoney(Double.valueOf(moneyEditText.getText().toString()));
+                    exp.setMoney(BigDecimal.valueOf((Double.valueOf(moneyEditText.getText().toString()))).setScale(2, BigDecimal.ROUND_HALF_UP));
                     exp.setSpend(checkedRadioButtonId == radioButtonSend.getId());
 
                     intent.putExtra(Expense.KEY, exp);

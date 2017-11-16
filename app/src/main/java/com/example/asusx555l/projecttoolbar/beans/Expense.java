@@ -1,6 +1,7 @@
 package com.example.asusx555l.projecttoolbar.beans;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
 public class Expense implements Serializable {
 
@@ -10,16 +11,16 @@ public class Expense implements Serializable {
         USD, EUR, RUB
     }
 
-    private double money;
+    private BigDecimal money;
     private Currency currency;
     private String date;
     private boolean spend;
 
-    public double getMoney() {
+    public BigDecimal getMoney() {
         return money;
     }
 
-    public void setMoney(double money) {
+    public void setMoney(BigDecimal money) {
         this.money = money;
     }
 

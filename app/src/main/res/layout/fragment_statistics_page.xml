@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="5dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shadow_border_income">
+
+            <TextView
+                android:id="@+id/toDay"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="5dp"
+                android:textSize="20sp"
+                android:fontFamily="sans-serif"
+                android:textColor="@color/colorBlackDark"
+                android:text="Сегодня" />
+
+            <View
+                android:id="@+id/viewOne"
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_below="@+id/toDay"
+                android:layout_gravity="center"
+                android:background="@color/grey"
+                android:layout_alignLeft="@+id/toDay"
+                android:layout_alignRight="@+id/moneyDayL"
+                android:layout_marginTop="1dp" />
+
+            <TextView
+                android:id="@+id/toWeek"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:textSize="20sp"
+                android:fontFamily="sans-serif"
+                android:layout_below="@+id/viewOne"
+                android:layout_alignLeft="@+id/toDay"
+                android:textColor="@color/colorBlackDark"
+                android:text="Неделя" />
+
+            <View
+                android:id="@+id/viewTwo"
+                android:layout_width="wrap_content"
+                android:layout_height="1dp"
+                android:layout_below="@+id/toWeek"
+                android:layout_gravity="center"
+                android:background="@color/grey"
+                android:layout_alignLeft="@+id/toDay"
+                android:layout_alignRight="@+id/moneyDayL"
+                android:layout_marginTop="1dp" />
+
+            <TextView
+                android:id="@+id/toMonth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="1dp"
+                android:textSize="20sp"
+                android:layout_marginBottom="5dp"
+                android:fontFamily="sans-serif"
+                android:layout_below="@+id/viewTwo"
+                android:layout_alignLeft="@+id/toDay"
+                android:textColor="@color/colorBlackDark"
+                android:text="Месяц" />
+
+            <TextView
+                android:id="@+id/moneyDayL"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignBottom="@+id/toDay"
+                android:layout_marginRight="10dp"
+                android:text="0.00"
+                android:textSize="20sp" />
+
+
+            <TextView
+                android:id="@+id/moneyWeekL"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignRight="@+id/moneyDayL"
+                android:layout_marginRight="10dp"
+                android:layout_alignBottom="@+id/toWeek"
+                android:text="0.00"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/moneyMonthL"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignRight="@+id/moneyDayL"
+                android:layout_marginRight="10dp"
+                android:layout_alignBottom="@+id/toMonth"
+                android:text="0.00"
+                android:textSize="20sp" />
+
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+</LinearLayout>

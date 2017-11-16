@@ -1,4 +1,4 @@
-package com.example.asusx555l.projecttoolbar.ui.Fragmets;
+package com.example.asusx555l.projecttoolbar.ui.fragmets;
 
 import android.support.v4.app.Fragment;
 

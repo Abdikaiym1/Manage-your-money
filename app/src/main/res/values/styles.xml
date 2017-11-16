@@ -38,10 +38,9 @@
     <style name="TabLayoutStyle" parent="Widget.Design.TabLayout">
         <item name="tabIndicatorColor">@color/colorBlackDark</item>
         <item name="tabIndicatorHeight">5dp</item>
-        <item name="tabPaddingStart">50dp</item>
-        <item name="tabPaddingEnd">50dp</item>
-        <item name="tabBackground">@color/grey300</item>
+        <item name="tabBackground">@color/primary_ligher</item>
         <item name="tabSelectedTextColor">@android:color/white</item>
+        <item name="android:elevation">0dp</item>
     </style>
 
     <style name="DialogTheme" parent="Theme.AppCompat.Light.Dialog">
