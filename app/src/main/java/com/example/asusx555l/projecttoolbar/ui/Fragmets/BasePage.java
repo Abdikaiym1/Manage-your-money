@@ -72,5 +72,4 @@ public abstract class BasePage extends Fragment implements ExpensesRecyclerViewA
     public void getExpense(Expense expense) {
     }
 
-    ;
 }
