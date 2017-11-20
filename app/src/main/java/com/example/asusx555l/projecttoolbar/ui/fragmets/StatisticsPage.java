@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.asusx555l.projecttoolbar.R;
+import com.example.asusx555l.projecttoolbar.StringToIntegerDate;
 import com.example.asusx555l.projecttoolbar.beans.Expense;
 import com.example.asusx555l.projecttoolbar.ui.activities.SecondActivity;
 
@@ -24,6 +25,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import static java.lang.Math.E;
 import static java.lang.Math.abs;
 
 /**
@@ -31,32 +33,35 @@ import static java.lang.Math.abs;
  */
 public class StatisticsPage extends BasePage {
 
-    public static final String FormatTIME = "HH";
-    public static final String FormatDAY = "dd";
-    public static final String FormatMonth = "MM";
-    public static final String RESET = "0.00";
+    private static final String FormatTIME = "HH";
+    private static final String FormatDAY = "dd";
+    private static final String FormatMonth = "MM";
+    private static final String RESET = "0.00";
+    private static final String DATE = "dd-MM-yyyy";
 
 
-    private List<BigDecimal> listMoneyLeave;
     TextView textMoneyDayL;
     TextView textMoneyWeekL;
     TextView textMoneyMonthL;
+
     private Timer timer;
     private TimerTask timerTask;
     private Handler handler;
     private SimpleDateFormat simpleDateFormat;
     private SimpleDateFormat simpleDateFormatDay;
     private SimpleDateFormat simpleDateFormatMonth;
+    private SimpleDateFormat simpleDate;
     private int lastDay, lastMonth;
-    private BigDecimal sumToDay;
-    private int count;
+
+    private BigDecimal[] dmyMoneyLeave = {BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO};
+
+    private StringToIntegerDate stringToIntegerDate = new StringToIntegerDate();
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_statistics_page, container, false);
-        listMoneyLeave = new ArrayList<>();
         textMoneyDayL = view.findViewById(R.id.moneyDayL);
         textMoneyWeekL = view.findViewById(R.id.moneyWeekL);
         textMoneyMonthL = view.findViewById(R.id.moneyMonthL);
@@ -64,6 +69,8 @@ public class StatisticsPage extends BasePage {
         simpleDateFormat = new SimpleDateFormat(FormatTIME);
         simpleDateFormatDay = new SimpleDateFormat(FormatDAY);
         simpleDateFormatMonth = new SimpleDateFormat(FormatMonth);
+        simpleDate = new SimpleDateFormat(DATE);
+
 
         timer = new Timer();
         handler = new Handler();
@@ -78,31 +85,46 @@ public class StatisticsPage extends BasePage {
     public void getExpense(Expense expense) {
         super.getExpense(expense);
         if (expense.isSpend()) {
-            listMoneyLeave.add(expense.getMoney());
-            sumToDay = new BigDecimal(0);
-            for (int i = 0; i < listMoneyLeave.size(); i++) {
-                sumToDay = sumToDay.add(listMoneyLeave.get(i));
+            Log.d("TEST", simpleDate.format(new Date()));
+            if (stringToIntegerDate.getDay(expense.getDate()) == Integer.parseInt(simpleDateFormatDay.format(new Date()))
+                    && stringToIntegerDate.getMonth(expense.getDate()) == (Integer.parseInt(simpleDateFormatMonth.format(new Date())) - 1)
+                    ) {
+                dmyMoneyLeave[0] = dmyMoneyLeave[0].add(expense.getMoney());
+                dmyMoneyLeave[1] = dmyMoneyLeave[1].add(expense.getMoney());
+                dmyMoneyLeave[2] = dmyMoneyLeave[2].add(expense.getMoney());
+
+                textMoneyDayL.setText(String.valueOf(dmyMoneyLeave[0]));
+                textMoneyWeekL.setText(String.valueOf(dmyMoneyLeave[1]));
+                textMoneyMonthL.setText(String.valueOf(dmyMoneyLeave[2]));
+            } else if (stringToIntegerDate.getDay(expense.getDate()) - Integer.parseInt(simpleDateFormatDay.format(new Date())) <= 6 &&
+                    stringToIntegerDate.getMonth(expense.getDate()) == (Integer.parseInt(simpleDateFormatMonth.format(new Date())) - 1)) {
+
+                dmyMoneyLeave[1] = dmyMoneyLeave[1].add(expense.getMoney());
+                dmyMoneyLeave[2] = dmyMoneyLeave[2].add(expense.getMoney());
+
+                textMoneyWeekL.setText(String.valueOf(dmyMoneyLeave[1]));
+                textMoneyMonthL.setText(String.valueOf(dmyMoneyLeave[2]));
+            } else if (stringToIntegerDate.getMonth(expense.getDate())
+                    == (Integer.parseInt(simpleDateFormatMonth.format(new Date())) - 1)) {
+
+                dmyMoneyLeave[2] = dmyMoneyLeave[2].add(expense.getMoney());
+
+                textMoneyMonthL.setText(String.valueOf(dmyMoneyLeave[2]));
             }
-            textMoneyDayL.setText(String.valueOf(sumToDay));
-            textMoneyWeekL.setText(String.valueOf(sumToDay));
-            textMoneyMonthL.setText(String.valueOf(sumToDay));
         }
     }
 
     public void timeSetIncome() {
-        count = 0;
         timerTask = new TimerTask() {
             @Override
             public void run() {
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        count++;
-                        if (count > 1)
-                            textMoneyDayL.setText(RESET);
-                        if (count % 7 == 0)
+                        textMoneyDayL.setText(RESET);
+                        if (stringToIntegerDate.dayOfWeek(simpleDate.format(new Date())) == 2)
                             textMoneyWeekL.setText(RESET);
-                        if (count % 30 == 0)
+                        if (Integer.parseInt(simpleDateFormatDay.format(new Date())) == 1)
                             textMoneyMonthL.setText(RESET);
                     }
                 });
@@ -116,7 +138,8 @@ public class StatisticsPage extends BasePage {
         int curMonth = Integer.parseInt(simpleDateFormatMonth.format(new Date()));
         if (abs(lastDay - curDay) != 0 && lastMonth - curMonth == 0) {
             textMoneyDayL.setText(RESET);
-        } else if (abs(curDay - lastDay) != 7 && lastMonth - curMonth == 0) {
+        } else if (abs(curDay - lastDay) <= 6 && lastMonth - curMonth == 0) {
+            textMoneyDayL.setText(RESET);
             textMoneyWeekL.setText(RESET);
         } else {
             textMoneyWeekL.setText(RESET);
@@ -128,8 +151,6 @@ public class StatisticsPage extends BasePage {
 
     @Override
     public void onDestroy() {
-        /*currentTime = Integer.parseInt(simpleDateFormat.format(new Date()));
-        int diffTime = Integer.parseInt(simpleDateFormat.format(new Date())) - currentTime;*/
 
         lastDay = Integer.parseInt(simpleDateFormatDay.format(new Date()));
         lastMonth = Integer.parseInt(simpleDateFormatMonth.format(new Date()));
