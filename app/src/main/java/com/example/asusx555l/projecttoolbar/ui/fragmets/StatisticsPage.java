@@ -11,6 +11,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -59,7 +61,11 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
     private SimpleDateFormat simpleDateFormatMonth;
     private SimpleDateFormat simpleDate;
     private int lastDay, lastMonth;
-    private Button button;
+    private RadioGroup radioGroup;
+    private RadioButton radioButtonUSD;
+    private RadioButton radioButtonEUR;
+    private RadioButton radioButtonRUB;
+    private String curVaute;
 
     private BigDecimal[] dmyMoneyLeave = {BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO};
     private Valute[] valutes = {null, null};
@@ -73,21 +79,21 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
         textMoneyDayL = view.findViewById(R.id.moneyDayL);
         textMoneyWeekL = view.findViewById(R.id.moneyWeekL);
         textMoneyMonthL = view.findViewById(R.id.moneyMonthL);
+        radioGroup = view.findViewById(R.id.radioGroupValute);
+        radioButtonUSD = view.findViewById(R.id.radio_USDValute);
+        radioButtonEUR = view.findViewById(R.id.radio_EURValute);
+        radioButtonRUB = view.findViewById(R.id.radio_RUBValute);
 
         simpleDateFormat = new SimpleDateFormat(FormatTIME);
         simpleDateFormatDay = new SimpleDateFormat(FormatDAY);
         simpleDateFormatMonth = new SimpleDateFormat(FormatMonth);
         simpleDate = new SimpleDateFormat(DATE);
 
-        button = view.findViewById(R.id.ButtonXMLTEST);
-        button.setOnClickListener(oclBtnCancel);
-
         timer = new Timer();
         handler = new Handler();
 
         timeSetIncome();
         Simple();
-
 
         return view;
     }
@@ -96,7 +102,6 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
     public void getExpense(Expense expense) {
         super.getExpense(expense);
         if (expense.isSpend()) {
-            Log.d("TEST", simpleDate.format(new Date()));
             if (stringToIntegerDate.getDay(expense.getDate()) == Integer.parseInt(simpleDateFormatDay.format(new Date()))
                     && stringToIntegerDate.getMonth(expense.getDate()) == (Integer.parseInt(simpleDateFormatMonth.format(new Date())) - 1)
                     ) {
@@ -163,25 +168,41 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
 
     @Override
     public void onDestroy() {
-
         lastDay = Integer.parseInt(simpleDateFormatDay.format(new Date()));
         lastMonth = Integer.parseInt(simpleDateFormatMonth.format(new Date()));
-
         super.onDestroy();
     }
 
-    View.OnClickListener oclBtnCancel = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            XMLParser xmlParser = new XMLParser(StatisticsPage.this);
-            xmlParser.execute();
-        }
-    };
+    @Override
+    public void onResume() {
+        XMLParser xmlParser = new XMLParser(StatisticsPage.this, simpleDate.format(new Date()));
+        xmlParser.execute();
+        radioButtonUSD.setOnClickListener(radioButtonClickVaute);
+        radioButtonEUR.setOnClickListener(radioButtonClickVaute);
+        radioButtonRUB.setOnClickListener(radioButtonClickVaute);
+        super.onResume();
+    }
 
     @Override
     public void send(Valute[] valute) {
         valutes = valute;
-
     }
 
+    View.OnClickListener radioButtonClickVaute = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            RadioButton radioButton = (RadioButton) v;
+            switch (radioButton.getId()) {
+                case R.id.radio_USDValute:
+                    curVaute = valutes[0].getCharCode();
+                    break;
+                case R.id.radio_EURValute:
+                    curVaute = valutes[1].getCharCode();
+                    break;
+                case R.id.radio_RUBValute:
+                    curVaute = "RUB";
+                    break;
+            }
+        }
+    };
 }

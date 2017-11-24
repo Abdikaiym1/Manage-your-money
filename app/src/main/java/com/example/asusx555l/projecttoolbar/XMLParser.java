@@ -3,6 +3,8 @@ package com.example.asusx555l.projecttoolbar;
 import android.content.res.XmlResourceParser;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 
 import com.example.asusx555l.projecttoolbar.ui.activities.MainActivity;
@@ -33,7 +35,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 public class XMLParser extends AsyncTask<Object, Valute, Integer> {
 
-    private static final String URLDate = "http://www.cbr.ru/scripts/XML_daily.asp?date_req=23.11.2017";
+    private String URLDate = "http://www.cbr.ru/scripts/XML_daily.asp?date_req=";
     public Valute[] valute = {null, null};
 
     @Override
@@ -135,8 +137,9 @@ public class XMLParser extends AsyncTask<Object, Valute, Integer> {
         void send(Valute[] valute);
     }
 
-    public XMLParser(SendResult sendResult) {
+    public XMLParser(SendResult sendResult, String date) {
         this.sendResult = sendResult;
+        URLDate = URLDate + date;
     }
 
     @Override
