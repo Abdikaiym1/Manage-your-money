@@ -48,10 +48,10 @@ public class StringToIntegerDate {
         }
 
         int codeYear = ((6 + (vYear % 100) + (vYear % 100) / 4) % 7) + (dmy[2] - vYear);
-        int res = ((codeYear + codeMonth[dmy[1]] + dmy[0]) % 7);
+        int res = ((codeYear + codeMonth[dmy[1] - 1] + dmy[0]) % 7);
 
         if (dmy[2] % 4 == 0 && (dmy[1] == 0 || dmy[1] == 1)) {
-            res = ((codeYear + codeMonth[dmy[1]] + dmy[0] - 1) % 7);
+            res = ((codeYear + codeMonth[dmy[1] - 1] + dmy[0] - 1) % 7);
         }
 
         return res;

@@ -10,14 +10,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.asusx555l.projecttoolbar.R;
 import com.example.asusx555l.projecttoolbar.StringToIntegerDate;
+import com.example.asusx555l.projecttoolbar.Valute;
+import com.example.asusx555l.projecttoolbar.XMLParser;
 import com.example.asusx555l.projecttoolbar.beans.Expense;
 import com.example.asusx555l.projecttoolbar.ui.activities.SecondActivity;
 
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -28,16 +35,16 @@ import java.util.TimerTask;
 import static java.lang.Math.E;
 import static java.lang.Math.abs;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class StatisticsPage extends BasePage {
+
+public class StatisticsPage extends BasePage implements XMLParser.SendResult {
 
     private static final String FormatTIME = "HH";
     private static final String FormatDAY = "dd";
     private static final String FormatMonth = "MM";
     private static final String RESET = "0.00";
     private static final String DATE = "dd-MM-yyyy";
+
+    private static final String URL = "http://www.cbr.ru/scripts/XML_daily.asp?date_req=23.11.2017";
 
 
     TextView textMoneyDayL;
@@ -52,11 +59,12 @@ public class StatisticsPage extends BasePage {
     private SimpleDateFormat simpleDateFormatMonth;
     private SimpleDateFormat simpleDate;
     private int lastDay, lastMonth;
+    private Button button;
 
     private BigDecimal[] dmyMoneyLeave = {BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO};
+    private Valute[] valutes = {null, null};
 
     private StringToIntegerDate stringToIntegerDate = new StringToIntegerDate();
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -71,13 +79,16 @@ public class StatisticsPage extends BasePage {
         simpleDateFormatMonth = new SimpleDateFormat(FormatMonth);
         simpleDate = new SimpleDateFormat(DATE);
 
+        button = view.findViewById(R.id.ButtonXMLTEST);
+        button.setOnClickListener(oclBtnCancel);
 
         timer = new Timer();
         handler = new Handler();
 
         timeSetIncome();
         Simple();
-        //timer.schedule(timerTask, 10, 86400*1000);
+
+
         return view;
     }
 
@@ -105,7 +116,8 @@ public class StatisticsPage extends BasePage {
                 textMoneyWeekL.setText(String.valueOf(dmyMoneyLeave[1]));
                 textMoneyMonthL.setText(String.valueOf(dmyMoneyLeave[2]));
             } else if (stringToIntegerDate.getMonth(expense.getDate())
-                    == (Integer.parseInt(simpleDateFormatMonth.format(new Date())) - 1)) {
+                    == (Integer.parseInt(simpleDateFormatMonth.format(new Date())) - 1) &&
+                    stringToIntegerDate.getDay(expense.getDate()) - Integer.parseInt(simpleDateFormatDay.format(new Date())) > 6) {
 
                 dmyMoneyLeave[2] = dmyMoneyLeave[2].add(expense.getMoney());
 
@@ -157,4 +169,19 @@ public class StatisticsPage extends BasePage {
 
         super.onDestroy();
     }
+
+    View.OnClickListener oclBtnCancel = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            XMLParser xmlParser = new XMLParser(StatisticsPage.this);
+            xmlParser.execute();
+        }
+    };
+
+    @Override
+    public void send(Valute[] valute) {
+        valutes = valute;
+
+    }
+
 }

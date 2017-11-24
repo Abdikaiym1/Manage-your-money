@@ -64,7 +64,7 @@ public abstract class BasePage extends Fragment implements ExpensesRecyclerViewA
     }
 
     public void addNewExpense(Expense expense) {
-        expenseList.add(expense);
+        expenseList.add(0, expense);
         Log.e("str", String.valueOf(expenseList.size()));
         mAdapter.notifyDataSetChanged();
     }

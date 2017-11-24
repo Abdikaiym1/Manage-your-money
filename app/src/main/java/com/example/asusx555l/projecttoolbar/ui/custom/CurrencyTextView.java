@@ -29,11 +29,12 @@ public class CurrencyTextView extends TextView {
     private void init(Context context, AttributeSet attrs) {
         if (attrs != null) {
             TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.CurrencyTextView);
-            for (int i = 0; i < a.getIndexCount(); i++) {
+            name = a.getString(R.styleable.CurrencyTextView_currencyName);
+            /*for (int i = 0; i < a.getIndexCount(); i++) {
                 if (a.getIndex(i) == R.styleable.CurrencyTextView_currencyName) {
                     name = a.getString(i);
                 }
-            }
+            }*/
 
             a.recycle();
         }

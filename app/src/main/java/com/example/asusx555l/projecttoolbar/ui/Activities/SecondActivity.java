@@ -71,7 +71,7 @@ public class SecondActivity extends AppCompatActivity  {
     public void setupDateFun() { //simple test for GIT
         editText = (EditText)findViewById(R.id.dateEditText);
         calendar = Calendar.getInstance();
-        editText.setText(calendar.get(Calendar.DAY_OF_MONTH)+"-"+calendar.get(Calendar.MONTH)+"-"+calendar.get(Calendar.YEAR));
+        editText.setText(calendar.get(Calendar.DAY_OF_MONTH) + "-" + (calendar.get(Calendar.MONTH) + 1) + "-" + calendar.get(Calendar.YEAR));
 
         editText.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -83,7 +83,7 @@ public class SecondActivity extends AppCompatActivity  {
                 DatePickerDialog pickerDialog = new DatePickerDialog(SecondActivity.this, R.style.DialogTheme, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
-                        editText.setText(i2+"-"+i1+"-"+i);
+                        editText.setText(i2 + "-" + (i1 + 1) + "-" + i);
                         calendar.set(i, i1, i2);
                     }
                 }, year, month, day);

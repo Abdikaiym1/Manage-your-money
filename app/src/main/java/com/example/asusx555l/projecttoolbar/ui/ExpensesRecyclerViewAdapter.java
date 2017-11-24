@@ -2,6 +2,7 @@ package com.example.asusx555l.projecttoolbar.ui;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,8 +46,8 @@ public class ExpensesRecyclerViewAdapter extends RecyclerView.Adapter<ExpensesRe
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Expense exp = listItems.get(position);
-        holder.money.setText(String.valueOf(exp.getMoney()));
         holder.money.setCurrencyText(exp.getCurrency().name());
+        holder.money.setText(String.valueOf(exp.getMoney()));
         holder.date.setText(exp.getDate());
 
         holder.date.setTextColor(context.getResources().getColor(exp.isSpend() ? android.R.color.holo_red_dark : android.R.color.holo_green_dark));
