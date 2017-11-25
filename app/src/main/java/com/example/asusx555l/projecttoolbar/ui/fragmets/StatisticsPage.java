@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.asusx555l.projecttoolbar.R;
 import com.example.asusx555l.projecttoolbar.StringToIntegerDate;
+import com.example.asusx555l.projecttoolbar.ValueToCurrentValue;
 import com.example.asusx555l.projecttoolbar.Valute;
 import com.example.asusx555l.projecttoolbar.XMLParser;
 import com.example.asusx555l.projecttoolbar.beans.Expense;
@@ -31,6 +32,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -45,7 +47,6 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
     private static final String FormatMonth = "MM";
     private static final String RESET = "0.00";
     private static final String DATE = "dd-MM-yyyy";
-
     private static final String URL = "http://www.cbr.ru/scripts/XML_daily.asp?date_req=23.11.2017";
 
 
@@ -65,10 +66,11 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
     private RadioButton radioButtonUSD;
     private RadioButton radioButtonEUR;
     private RadioButton radioButtonRUB;
-    private String curVaute;
+    private String curVaute = "RUB";
 
     private BigDecimal[] dmyMoneyLeave = {BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO};
     private Valute[] valutes = {null, null};
+    private ValueToCurrentValue convertToCurValute = new ValueToCurrentValue();
 
     private StringToIntegerDate stringToIntegerDate = new StringToIntegerDate();
 
@@ -101,30 +103,42 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
     @Override
     public void getExpense(Expense expense) {
         super.getExpense(expense);
+        BigDecimal valueUSD = new BigDecimal(valutes[0].getValue().replace(",", "."));
+        BigDecimal valueEUR = new BigDecimal(valutes[1].getValue().replace(",", "."));
+        Log.e("TEST", String.valueOf(1));
+        BigDecimal[] allValueMoney =
+                {new BigDecimal(valutes[0].getValue().replace(",", ".")), new BigDecimal(valutes[1].getValue().replace(",", ".")), expense.getMoney()};
+
         if (expense.isSpend()) {
             if (stringToIntegerDate.getDay(expense.getDate()) == Integer.parseInt(simpleDateFormatDay.format(new Date()))
-                    && stringToIntegerDate.getMonth(expense.getDate()) == (Integer.parseInt(simpleDateFormatMonth.format(new Date())) - 1)
+                    && stringToIntegerDate.getMonth(expense.getDate()) == Integer.parseInt(simpleDateFormatMonth.format(new Date()))
                     ) {
-                dmyMoneyLeave[0] = dmyMoneyLeave[0].add(expense.getMoney());
-                dmyMoneyLeave[1] = dmyMoneyLeave[1].add(expense.getMoney());
-                dmyMoneyLeave[2] = dmyMoneyLeave[2].add(expense.getMoney());
+
+                BigDecimal curMoney = convertToCurValute.convetValute(curVaute, allValueMoney, expense.getCurrency().name());
+                Log.e("TEST", String.valueOf(curMoney));
+                dmyMoneyLeave[0] = dmyMoneyLeave[0].add(curMoney);
+                dmyMoneyLeave[1] = dmyMoneyLeave[1].add(curMoney);
+                dmyMoneyLeave[2] = dmyMoneyLeave[2].add(curMoney);
 
                 textMoneyDayL.setText(String.valueOf(dmyMoneyLeave[0]));
                 textMoneyWeekL.setText(String.valueOf(dmyMoneyLeave[1]));
                 textMoneyMonthL.setText(String.valueOf(dmyMoneyLeave[2]));
             } else if (stringToIntegerDate.getDay(expense.getDate()) - Integer.parseInt(simpleDateFormatDay.format(new Date())) <= 6 &&
-                    stringToIntegerDate.getMonth(expense.getDate()) == (Integer.parseInt(simpleDateFormatMonth.format(new Date())) - 1)) {
+                    stringToIntegerDate.getMonth(expense.getDate()) == Integer.parseInt(simpleDateFormatMonth.format(new Date()))) {
 
-                dmyMoneyLeave[1] = dmyMoneyLeave[1].add(expense.getMoney());
-                dmyMoneyLeave[2] = dmyMoneyLeave[2].add(expense.getMoney());
+                BigDecimal curMoney = convertToCurValute.convetValute(curVaute, allValueMoney, expense.getCurrency().name());
+                dmyMoneyLeave[1] = dmyMoneyLeave[1].add(curMoney);
+                dmyMoneyLeave[2] = dmyMoneyLeave[2].add(curMoney);
 
                 textMoneyWeekL.setText(String.valueOf(dmyMoneyLeave[1]));
                 textMoneyMonthL.setText(String.valueOf(dmyMoneyLeave[2]));
             } else if (stringToIntegerDate.getMonth(expense.getDate())
-                    == (Integer.parseInt(simpleDateFormatMonth.format(new Date())) - 1) &&
+                    == Integer.parseInt(simpleDateFormatMonth.format(new Date())) &&
                     stringToIntegerDate.getDay(expense.getDate()) - Integer.parseInt(simpleDateFormatDay.format(new Date())) > 6) {
 
-                dmyMoneyLeave[2] = dmyMoneyLeave[2].add(expense.getMoney());
+                BigDecimal curMoney = convertToCurValute.convetValute(curVaute, allValueMoney, expense.getCurrency().name());
+
+                dmyMoneyLeave[2] = dmyMoneyLeave[2].add(curMoney);
 
                 textMoneyMonthL.setText(String.valueOf(dmyMoneyLeave[2]));
             }
@@ -175,11 +189,13 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
 
     @Override
     public void onResume() {
+
         XMLParser xmlParser = new XMLParser(StatisticsPage.this, simpleDate.format(new Date()));
         xmlParser.execute();
         radioButtonUSD.setOnClickListener(radioButtonClickVaute);
         radioButtonEUR.setOnClickListener(radioButtonClickVaute);
         radioButtonRUB.setOnClickListener(radioButtonClickVaute);
+
         super.onResume();
     }
 
@@ -194,10 +210,14 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
             RadioButton radioButton = (RadioButton) v;
             switch (radioButton.getId()) {
                 case R.id.radio_USDValute:
-                    curVaute = valutes[0].getCharCode();
+                    if (valutes[0].getCharCode() == null) {
+                        curVaute = "USD";
+                    } else curVaute = valutes[0].getCharCode();
                     break;
                 case R.id.radio_EURValute:
-                    curVaute = valutes[1].getCharCode();
+                    if (valutes[1].getCharCode() == null) {
+                        curVaute = "EUR";
+                    } else curVaute = valutes[1].getCharCode();
                     break;
                 case R.id.radio_RUBValute:
                     curVaute = "RUB";

@@ -71,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 Expense expense = (Expense) data.getSerializableExtra(Expense.KEY);
                 (fragmentAdapter.getFragment(0)).getExpense(expense);
+                Log.e("String", expense.getDate());
                 int position = expense.isSpend() ? 1 : 0;
                 if (fragmentAdapter.getFragment(position + 1) != null) {
                     fragmentAdapter.getFragment(position + 1).addNewExpense(expense);
