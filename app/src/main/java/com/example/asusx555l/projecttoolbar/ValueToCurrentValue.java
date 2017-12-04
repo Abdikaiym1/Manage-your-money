@@ -35,7 +35,8 @@ public class ValueToCurrentValue {
             } else if (Objects.equals(nameMoney, "EUR")) {
                 curMoney = money.multiply(valueEUR);
             } else curMoney = money;
-            return curMoney.stripTrailingZeros();
+            curMoney = curMoney.stripTrailingZeros();
+            return curMoney.setScale(2, BigDecimal.ROUND_DOWN);
         }
     }
 }

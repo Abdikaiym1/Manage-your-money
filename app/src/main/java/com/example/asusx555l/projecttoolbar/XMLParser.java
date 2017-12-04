@@ -37,7 +37,12 @@ import javax.xml.parsers.ParserConfigurationException;
 public class XMLParser extends AsyncTask<Object, Valute, Integer> {
 
     private String URLDate = "http://www.cbr.ru/scripts/XML_daily.asp?date_req=";
-    public Valute[] valute = {null, null};
+    public Valute[] valute = new Valute[2];
+
+    public XMLParser(SendResult sendResult, String date) {
+        this.sendResult = sendResult;
+        URLDate = URLDate + date;
+    }
 
     @Override
     protected Integer doInBackground(Object[] params) {
@@ -138,10 +143,6 @@ public class XMLParser extends AsyncTask<Object, Valute, Integer> {
         void send(Valute[] valute);
     }
 
-    public XMLParser(SendResult sendResult, String date) {
-        this.sendResult = sendResult;
-        URLDate = URLDate + date;
-    }
 
     @Override
     protected void onPostExecute(Integer integer) {

@@ -30,4 +30,5 @@
     <color name="primary_lightest">#F0F1F9</color>
     <color name="grey">#bfbfbf</color>
     <color name="white">#fff</color>
+    <color name="rare_red">#ff3333</color>
 </resources>

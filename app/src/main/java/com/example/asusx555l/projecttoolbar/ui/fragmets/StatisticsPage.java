@@ -2,10 +2,17 @@ package com.example.asusx555l.projecttoolbar.ui.fragmets;
 
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
+import android.graphics.PorterDuffColorFilter;
+import android.graphics.drawable.ColorDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -47,13 +54,19 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
     private static final String FormatMonth = "MM";
     private static final String RESET = "0.00";
     private static final String DATE = "dd-MM-yyyy";
-    private static final String URL = "http://www.cbr.ru/scripts/XML_daily.asp?date_req=23.11.2017";
+    private static final String USD = "USD";
+    private static final String EUR = "EUR";
+    private static final String RUB = "RUB";
 
 
     TextView textMoneyDayL;
     TextView textMoneyWeekL;
     TextView textMoneyMonthL;
+    TextView textTitleMonth;
+    TextView textTitleAllMoney;
+    TextView textTitleMoneyName;
 
+    private View view;
     private Timer timer;
     private TimerTask timerTask;
     private Handler handler;
@@ -66,7 +79,7 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
     private RadioButton radioButtonUSD;
     private RadioButton radioButtonEUR;
     private RadioButton radioButtonRUB;
-    private String curVaute = "RUB";
+    private String curVaute = RUB;
 
     private BigDecimal[] dmyMoneyLeave = {BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO};
     private Valute[] valutes = {null, null};
@@ -77,7 +90,7 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_statistics_page, container, false);
+        view = inflater.inflate(R.layout.fragment_statistics_page, container, false);
         textMoneyDayL = view.findViewById(R.id.moneyDayL);
         textMoneyWeekL = view.findViewById(R.id.moneyWeekL);
         textMoneyMonthL = view.findViewById(R.id.moneyMonthL);
@@ -90,6 +103,15 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
         simpleDateFormatDay = new SimpleDateFormat(FormatDAY);
         simpleDateFormatMonth = new SimpleDateFormat(FormatMonth);
         simpleDate = new SimpleDateFormat(DATE);
+
+        textTitleMonth = view.findViewById(R.id.title_income);
+        GradientDrawable gradientDrawable = (GradientDrawable) textTitleMonth.getBackground().mutate();
+        gradientDrawable.setColor(Color.rgb(68, 204, 0));
+
+        textTitleAllMoney = view.findViewById(R.id.title_allMoney);
+        gradientDrawable = (GradientDrawable) textTitleAllMoney.getBackground().mutate();
+        gradientDrawable.setColor(Color.rgb(255, 153, 153));
+
 
         timer = new Timer();
         handler = new Handler();
@@ -106,8 +128,7 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
         BigDecimal valueUSD = new BigDecimal(valutes[0].getValue().replace(",", "."));
         BigDecimal valueEUR = new BigDecimal(valutes[1].getValue().replace(",", "."));
         Log.e("TEST", String.valueOf(1));
-        BigDecimal[] allValueMoney =
-                {new BigDecimal(valutes[0].getValue().replace(",", ".")), new BigDecimal(valutes[1].getValue().replace(",", ".")), expense.getMoney()};
+        BigDecimal[] allValueMoney = new BigDecimal[]{valueUSD, valueEUR, expense.getMoney()};
 
         if (expense.isSpend()) {
             if (stringToIntegerDate.getDay(expense.getDate()) == Integer.parseInt(simpleDateFormatDay.format(new Date()))
@@ -164,7 +185,7 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
     }
 
     public void Simple() {
-        int diffTime = (24 - Integer.parseInt(simpleDateFormat.format(new Date()))) * 3600;
+        int diffTime = (24 - Integer.parseInt(simpleDateFormat.format(new Date()))) * 60 * 60 * 1000;
         int curDay = Integer.parseInt(simpleDateFormatDay.format(new Date()));
         int curMonth = Integer.parseInt(simpleDateFormatMonth.format(new Date()));
         if (abs(lastDay - curDay) != 0 && lastMonth - curMonth == 0) {
@@ -177,7 +198,7 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
             textMoneyDayL.setText(RESET);
             textMoneyMonthL.setText(RESET);
         }
-        timer.schedule(timerTask, diffTime, 86400);
+        timer.schedule(timerTask, diffTime, 24 * 60 * 60 * 1000);
     }
 
     @Override
@@ -189,6 +210,7 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
 
     @Override
     public void onResume() {
+        super.onResume();
 
         XMLParser xmlParser = new XMLParser(StatisticsPage.this, simpleDate.format(new Date()));
         xmlParser.execute();
@@ -196,7 +218,6 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
         radioButtonEUR.setOnClickListener(radioButtonClickVaute);
         radioButtonRUB.setOnClickListener(radioButtonClickVaute);
 
-        super.onResume();
     }
 
     @Override
@@ -211,18 +232,32 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
             switch (radioButton.getId()) {
                 case R.id.radio_USDValute:
                     if (valutes[0].getCharCode() == null) {
-                        curVaute = "USD";
+                        curVaute = USD;
                     } else curVaute = valutes[0].getCharCode();
+                    setTitleMoneyName(USD);
                     break;
                 case R.id.radio_EURValute:
                     if (valutes[1].getCharCode() == null) {
-                        curVaute = "EUR";
+                        curVaute = EUR;
                     } else curVaute = valutes[1].getCharCode();
+                    setTitleMoneyName(EUR);
                     break;
                 case R.id.radio_RUBValute:
-                    curVaute = "RUB";
+                    curVaute = RUB;
+                    setTitleMoneyName(RUB);
                     break;
             }
         }
     };
+
+    void setTitleMoneyName(String money) {
+        textTitleMoneyName = view.findViewById(R.id.title_money);
+        textTitleMoneyName.setText(money);
+
+        textTitleMoneyName = view.findViewById(R.id.title_income_money);
+        textTitleMoneyName.setText(money);
+
+        textTitleMoneyName = view.findViewById(R.id.title_allmoney_money);
+        textTitleMoneyName.setText(money);
+    }
 }
