@@ -304,7 +304,6 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
         if (flag) {
             dmyMoneyLeave = bigDecimals;
             textMoneyDayL.setText(String.valueOf(bigDecimals[0]));
-
             textMoneyWeekL.setText(String.valueOf(bigDecimals[1]));
             textMoneyMonthL.setText(String.valueOf(bigDecimals[2]));
         }
