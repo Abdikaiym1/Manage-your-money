@@ -49,6 +49,7 @@ public class ExpensesRecyclerViewAdapter extends RecyclerView.Adapter<ExpensesRe
         holder.money.setCurrencyText(exp.getCurrency().name());
         holder.money.setText(String.valueOf(exp.getMoney()));
         holder.date.setText(exp.getDate());
+        holder.tag.setText("#" + exp.getTag());
 
         holder.date.setTextColor(context.getResources().getColor(exp.isSpend() ? android.R.color.holo_red_dark : android.R.color.holo_green_dark));
 
@@ -85,11 +86,13 @@ public class ExpensesRecyclerViewAdapter extends RecyclerView.Adapter<ExpensesRe
     static class ViewHolder extends RecyclerView.ViewHolder {
         public CurrencyTextView money;
         public TextView date;
+        public TextView tag;
 
         public ViewHolder(View itemView) {
             super(itemView);
             money = itemView.findViewById(R.id.money);
             date =  (TextView) itemView.findViewById(R.id.date);
+            tag = (TextView) itemView.findViewById(R.id.tag);
         }
     }
 }

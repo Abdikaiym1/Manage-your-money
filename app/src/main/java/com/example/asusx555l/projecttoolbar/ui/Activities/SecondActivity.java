@@ -1,5 +1,6 @@
 package com.example.asusx555l.projecttoolbar.ui.activities;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.graphics.Color;
@@ -9,8 +10,12 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.ArrayAdapter;
+import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 
@@ -35,7 +40,9 @@ public class SecondActivity extends AppCompatActivity  {
     private RadioButton radioButton;
     private RadioButton radioButtonSend;
     private RadioGroup radioGroupSend;
-
+    private LinearLayout linearLayout;
+    private AutoCompleteTextView autoCompleteTextView;
+    private String[] TAG = {"Наркотики", "Еда", "Другие", "Other", "Шлюхи"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +63,19 @@ public class SecondActivity extends AppCompatActivity  {
 
         radioGroup = (RadioGroup)findViewById(R.id.radioGroup);
         radioGroupSend = (RadioGroup) findViewById(R.id.radioGroupSpend);
+        linearLayout = (LinearLayout) findViewById(R.id.liner_layout);
+        autoCompleteTextView = (AutoCompleteTextView) findViewById(R.id.auto_complete);
+        autoCompleteTextView.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_dropdown_item_1line, TAG));
+
+        linearLayout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+                inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+            }
+        });
     }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -98,7 +117,7 @@ public class SecondActivity extends AppCompatActivity  {
         FAB.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (moneyEditText.getText().length() == 0) {
+                if (moneyEditText.getText().length() == 0 || autoCompleteTextView.getText().length() == 0) {
                     finish();
                 } else {
                     Intent intent = new Intent();
@@ -112,6 +131,7 @@ public class SecondActivity extends AppCompatActivity  {
                     exp.setDate(editText.getText().toString());
                     exp.setMoney(BigDecimal.valueOf((Double.valueOf(moneyEditText.getText().toString()))).setScale(2, BigDecimal.ROUND_HALF_UP));
                     exp.setSpend(checkedRadioButtonId == radioButtonSend.getId());
+                    exp.setTag(autoCompleteTextView.getText().toString());
 
                     intent.putExtra(Expense.KEY, exp);
                     setResult(RESULT_OK, intent);
@@ -120,6 +140,5 @@ public class SecondActivity extends AppCompatActivity  {
             }
         });
     }
-
 
 }

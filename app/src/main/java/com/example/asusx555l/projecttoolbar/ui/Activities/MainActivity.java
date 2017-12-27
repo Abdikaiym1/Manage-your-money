@@ -92,7 +92,12 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout)findViewById(R.id.tabLayout);
         tabLayout.setupWithViewPager(viewPager);
         TabLayout.Tab tabHome = tabLayout.getTabAt(0);
-        TabLayout.Tab tabLike = tabLayout.getTabAt(1);
+        tabHome.setIcon(R.drawable.ic_home);
+        TabLayout.Tab tabGet = tabLayout.getTabAt(1);
+        tabGet.setIcon(R.drawable.ic_arrow_downward_black_24px);
+        TabLayout.Tab tabSpend = tabLayout.getTabAt(2);
+        tabSpend.setIcon(R.drawable.ic_arrow_upward_black_24px);
+
     }
 
 }

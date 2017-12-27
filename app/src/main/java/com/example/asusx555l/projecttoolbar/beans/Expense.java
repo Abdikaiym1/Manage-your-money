@@ -15,6 +15,15 @@ public class Expense implements Serializable {
     private Currency currency;
     private String date;
     private boolean spend;
+    private String tag;
+
+    public String getTag() {
+        return tag;
+    }
+
+    public void setTag(String tag) {
+        this.tag = tag;
+    }
 
     public BigDecimal getMoney() {
         return money;
