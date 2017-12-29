@@ -6,7 +6,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.asusx555l.projecttoolbar.ItemTouchHelperClass;
 import com.example.asusx555l.projecttoolbar.R;
@@ -20,16 +22,19 @@ import java.util.List;
 public class ExpensesRecyclerViewAdapter extends RecyclerView.Adapter<ExpensesRecyclerViewAdapter.ViewHolder>
     implements ItemTouchHelperClass.ItemTouchHelperAdapter {
 
-    private ItemTouchListener itemTouchListener;
+    private static ItemTouchListener itemTouchListener;
 
     public interface ItemTouchListener {
         void onItem(Expense mJustDeletedToDoItem, int mIndexOfDeletedToDoItem, List<Expense> listItems);
+
+        void onItemClick(int position, View view, List<Expense> listItems);
     }
 
     private List<Expense> listItems;
     private Context context;
     private Expense mJustDeletedToDoItem;
     private int mIndexOfDeletedToDoItem;
+
 
     public ExpensesRecyclerViewAdapter(List<Expense> listItems, ItemTouchListener itemTouchListener) {
         this.listItems = listItems;
@@ -83,16 +88,23 @@ public class ExpensesRecyclerViewAdapter extends RecyclerView.Adapter<ExpensesRe
         itemTouchListener.onItem(mJustDeletedToDoItem, mIndexOfDeletedToDoItem, listItems);
     }
 
-    static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public CurrencyTextView money;
         public TextView date;
         public TextView tag;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            itemView.setOnClickListener(this);
             money = itemView.findViewById(R.id.money);
             date =  (TextView) itemView.findViewById(R.id.date);
             tag = (TextView) itemView.findViewById(R.id.tag);
         }
+
+        @Override
+        public void onClick(View v) {
+            itemTouchListener.onItemClick(getAdapterPosition(), v, listItems);
+        }
     }
+
 }

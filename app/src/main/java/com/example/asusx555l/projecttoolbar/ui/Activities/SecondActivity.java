@@ -8,6 +8,7 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -26,11 +27,13 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.util.Calendar;
+import java.util.Objects;
 
 public class SecondActivity extends AppCompatActivity  {
 
 
     public static final int CODE = 3434;
+    public static final int BaseCODE = 123;
 
     private Toolbar toolbar;
     private Calendar calendar;
@@ -74,6 +77,8 @@ public class SecondActivity extends AppCompatActivity  {
                 inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
             }
         });
+
+        getDateFromBasePage();
     }
 
 
@@ -84,6 +89,34 @@ public class SecondActivity extends AppCompatActivity  {
                 finish();
             default:
                 return super.onOptionsItemSelected(item);
+        }
+    }
+
+    public void getDateFromBasePage() {
+        Intent intent = getIntent();
+        Expense expense = (Expense) intent.getSerializableExtra(Expense.KEY);
+        if (expense != null) {
+            moneyEditText.setText(String.valueOf(expense.getMoney()));
+            autoCompleteTextView.setText(expense.getTag());
+
+            RadioButton radioButtonUSD = (RadioButton) findViewById(R.id.radio_USD);
+            RadioButton radioButtonEUR = (RadioButton) findViewById(R.id.radio_EUR);
+            RadioButton radioButtonRUB = (RadioButton) findViewById(R.id.RUB);
+
+            if (Objects.equals(radioButtonEUR.getText().toString(), expense.getCurrency().name())) {
+                radioButtonEUR.setChecked(true);
+            } else if (Objects.equals(radioButtonUSD.getText().toString(), expense.getCurrency().name())) {
+                radioButtonUSD.setChecked(true);
+            } else {
+                radioButtonRUB.setChecked(true);
+            }
+
+            RadioButton radioButtonGet = (RadioButton) findViewById(R.id.radio_spend);
+            if (expense.isSpend()) {
+                radioButtonGet.setChecked(true);
+            }
+
+            editText.setText(expense.getDate());
         }
     }
 
