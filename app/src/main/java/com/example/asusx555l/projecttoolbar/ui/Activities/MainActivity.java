@@ -11,7 +11,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
+import com.example.asusx555l.projecttoolbar.ui.ExpensesRecyclerViewAdapter;
 import com.example.asusx555l.projecttoolbar.ui.FragmentAdapter;
 import com.example.asusx555l.projecttoolbar.ui.fragmets.BasePage;
 import com.example.asusx555l.projecttoolbar.ui.fragmets.IncomePage;
@@ -76,6 +78,17 @@ public class MainActivity extends AppCompatActivity {
                 if (fragmentAdapter.getFragment(position + 1) != null) {
                     fragmentAdapter.getFragment(position + 1).addNewExpense(expense);
                     viewPager.setCurrentItem(position + 1, true);
+                }
+            }
+        } else {
+            if (resultCode == RESULT_OK) {
+                Expense expense = (Expense) data.getSerializableExtra(Expense.KEY);
+                int positionExpense = data.getIntExtra(Expense.POSITION, 0);
+                (fragmentAdapter.getFragment(0)).getExpense(expense);
+                int positionFragment = expense.isSpend() ? 1 : 0;
+                if (fragmentAdapter.getFragment(positionFragment + 1) != null) {
+                    fragmentAdapter.getFragment(positionFragment + 1).addNewExpense(expense, positionExpense);
+                    viewPager.setCurrentItem(positionFragment + 1, true);
                 }
             }
         }

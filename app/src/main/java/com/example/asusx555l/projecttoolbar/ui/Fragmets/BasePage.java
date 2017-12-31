@@ -1,5 +1,7 @@
 package com.example.asusx555l.projecttoolbar.ui.fragmets;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
@@ -10,11 +12,13 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
 import com.example.asusx555l.projecttoolbar.ui.ExpensesRecyclerViewAdapter;
 import com.example.asusx555l.projecttoolbar.ItemTouchHelperClass;
 import com.example.asusx555l.projecttoolbar.R;
 import com.example.asusx555l.projecttoolbar.beans.Expense;
+import com.example.asusx555l.projecttoolbar.ui.activities.SecondActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +31,9 @@ public abstract class BasePage extends Fragment implements ExpensesRecyclerViewA
     protected List<Expense> expenseList;
     private ItemTouchHelper itemTouchHelper;
     private View view;
+    private Activity context;
+    private int curPosition;
+    
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,9 +70,40 @@ public abstract class BasePage extends Fragment implements ExpensesRecyclerViewA
                 }).show();
     }
 
+    @Override
+    public void onItemClick(int position, View view, List<Expense> listItems) {
+        curPosition = position;
+        Intent intent = new Intent(getActivity(), SecondActivity.class);
+        intent.putExtra(Expense.KEY, listItems.get(position));
+        intent.putExtra(Expense.POSITION, position);
+        getActivity().startActivityForResult(intent, SecondActivity.BaseCODE);
+    }
+
+    /*public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == SecondActivity.BaseCODE) {
+            if (resultCode == Activity.RESULT_OK) {
+                Expense expense = (Expense) data.getSerializableExtra(Expense.KEY);
+                if (!expenseList.get(curPosition).equals(expense)) {
+                    Log.v("LIST",expenseList.get(curPosition).getTag());
+                    Log.v("EXPENSE", expense.getTag());
+                    expenseList.set(curPosition, expense);
+                    mAdapter.notifyDataSetChanged();
+                }
+            }
+        }
+    }*/
+
+
+
     public void addNewExpense(Expense expense) {
         expenseList.add(0, expense);
-        Log.e("str", String.valueOf(expenseList.size()));
+        mAdapter.notifyDataSetChanged();
+    }
+
+    public void addNewExpense(Expense expense, int position) {
+        expenseList.remove(position);
+        expenseList.add(position, expense);
         mAdapter.notifyDataSetChanged();
     }
 

@@ -6,6 +6,7 @@ import java.math.BigDecimal;
 public class Expense implements Serializable {
 
     public static final String KEY = "Expense";
+    public static final String POSITION = "Position";
 
     public enum Currency {
         USD, EUR, RUB
