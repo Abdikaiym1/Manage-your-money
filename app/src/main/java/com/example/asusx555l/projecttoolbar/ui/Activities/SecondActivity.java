@@ -193,7 +193,7 @@ public class SecondActivity extends AppCompatActivity  {
                         exp.setFlagForChangeFragment(false);
                         Log.v("Far", String.valueOf(exp.isFlagForChangeFragment()));
                     }
-
+                    //re
                     Intent intent = new Intent();
                     intent.putExtra(Expense.KEY, exp);
                     intent.putExtra(Expense.POSITION, position);
