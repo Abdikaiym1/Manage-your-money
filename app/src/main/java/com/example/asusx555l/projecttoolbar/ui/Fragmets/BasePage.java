@@ -94,8 +94,6 @@ public abstract class BasePage extends Fragment implements ExpensesRecyclerViewA
         }
     }*/
 
-
-
     public void addNewExpense(Expense expense) {
         expenseList.add(0, expense);
         mAdapter.notifyDataSetChanged();
@@ -108,6 +106,17 @@ public abstract class BasePage extends Fragment implements ExpensesRecyclerViewA
     }
 
     public void getExpense(Expense expense) {
+    }
+
+    public void removeMoneyExpense(Expense expense) {
+
+    }
+
+    public void removeExpense(int position) {
+        Log.v("DSD", String.valueOf(position));
+        Log.v("DST", String.valueOf(expenseList.size()));
+        expenseList.remove(position);
+        mAdapter.notifyDataSetChanged();
     }
 
 }

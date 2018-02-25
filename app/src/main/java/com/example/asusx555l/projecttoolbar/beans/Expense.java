@@ -17,6 +17,15 @@ public class Expense implements Serializable {
     private String date;
     private boolean spend;
     private String tag;
+    private boolean flagForChangeFragment;
+
+    public boolean isFlagForChangeFragment() {
+        return flagForChangeFragment;
+    }
+
+    public void setFlagForChangeFragment(boolean flagForChangeFragment) {
+        this.flagForChangeFragment = flagForChangeFragment;
+    }
 
     public String getTag() {
         return tag;
@@ -57,4 +66,6 @@ public class Expense implements Serializable {
     public void setSpend(boolean spend) {
         this.spend = spend;
     }
+
+
 }

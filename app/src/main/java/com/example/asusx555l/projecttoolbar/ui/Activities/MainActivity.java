@@ -73,7 +73,6 @@ public class MainActivity extends AppCompatActivity {
             if (resultCode == RESULT_OK) {
                 Expense expense = (Expense) data.getSerializableExtra(Expense.KEY);
                 (fragmentAdapter.getFragment(0)).getExpense(expense);
-                Log.e("String", expense.getDate());
                 int position = expense.isSpend() ? 1 : 0;
                 if (fragmentAdapter.getFragment(position + 1) != null) {
                     fragmentAdapter.getFragment(position + 1).addNewExpense(expense);
@@ -83,12 +82,21 @@ public class MainActivity extends AppCompatActivity {
         } else {
             if (resultCode == RESULT_OK) {
                 Expense expense = (Expense) data.getSerializableExtra(Expense.KEY);
-                int positionExpense = data.getIntExtra(Expense.POSITION, 0);
                 (fragmentAdapter.getFragment(0)).getExpense(expense);
+                int positionExpense = data.getIntExtra(Expense.POSITION, 0);
                 int positionFragment = expense.isSpend() ? 1 : 0;
                 if (fragmentAdapter.getFragment(positionFragment + 1) != null) {
-                    fragmentAdapter.getFragment(positionFragment + 1).addNewExpense(expense, positionExpense);
-                    viewPager.setCurrentItem(positionFragment + 1, true);
+                    if (expense.isFlagForChangeFragment()) {
+                        if (positionFragment == 1)
+                            fragmentAdapter.getFragment(positionFragment).removeExpense(positionExpense);
+                        else
+                            fragmentAdapter.getFragment(positionFragment + 2).removeExpense(positionExpense);
+                        fragmentAdapter.getFragment(positionFragment + 1).addNewExpense(expense);
+                        viewPager.setCurrentItem(positionFragment + 1, true);
+                    } else {
+                        fragmentAdapter.getFragment(positionFragment + 1).addNewExpense(expense, positionExpense);
+                        viewPager.setCurrentItem(positionFragment + 1, true);
+                    }
                 }
             }
         }

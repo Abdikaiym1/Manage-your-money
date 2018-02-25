@@ -134,7 +134,7 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
         super.getExpense(expense);
         BigDecimal valueUSD = new BigDecimal(valutes[0].getValue().replace(",", "."));
         BigDecimal valueEUR = new BigDecimal(valutes[1].getValue().replace(",", "."));
-        Log.e("TEST", String.valueOf(1));
+
         BigDecimal[] allValueMoney = new BigDecimal[]{valueUSD, valueEUR, expense.getMoney()};
 
         if (expense.isSpend()) {
@@ -143,7 +143,6 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
                     ) {
 
                 BigDecimal curMoney = convertToCurValute.convetValute(curVaute, allValueMoney, expense.getCurrency().name());
-                Log.e("TEST", String.valueOf(curMoney));
                 dmyMoneyLeave[0] = dmyMoneyLeave[0].add(curMoney);
                 dmyMoneyLeave[1] = dmyMoneyLeave[1].add(curMoney);
                 dmyMoneyLeave[2] = dmyMoneyLeave[2].add(curMoney);
@@ -182,6 +181,11 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
             textMoneyB.setText(String.valueOf(allTimeMoney));
         }
 
+    }
+
+    @Override
+    public void removeMoneyExpense(Expense expense) {
+        super.removeMoneyExpense(expense);
     }
 
     public void timeSetIncome() {

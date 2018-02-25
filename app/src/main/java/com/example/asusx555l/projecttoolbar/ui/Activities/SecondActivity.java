@@ -45,7 +45,10 @@ public class SecondActivity extends AppCompatActivity  {
     private RadioGroup radioGroupSend;
     private LinearLayout linearLayout;
     private AutoCompleteTextView autoCompleteTextView;
-    private String[] TAG = {"Наркотики", "Еда", "Другие", "Other", "Шлюхи"};
+    private Expense curExpense;
+    private boolean flag;
+    private String[] TAG = {};
+    private int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -86,6 +89,13 @@ public class SecondActivity extends AppCompatActivity  {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case android.R.id.home:
+                if (curExpense != null) {
+                    Intent intent = new Intent();
+                    intent.putExtra(Expense.KEY, curExpense);
+                    intent.putExtra(Expense.POSITION, position);
+                    setResult(RESULT_OK, intent);
+                    finish();
+                }
                 finish();
             default:
                 return super.onOptionsItemSelected(item);
@@ -95,6 +105,9 @@ public class SecondActivity extends AppCompatActivity  {
     public void getDateFromBasePage() {
         Intent intent = getIntent();
         Expense expense = (Expense) intent.getSerializableExtra(Expense.KEY);
+        curExpense = expense;
+        position = intent.getIntExtra(Expense.POSITION, 0);
+
         if (expense != null) {
             moneyEditText.setText(String.valueOf(expense.getMoney()));
             autoCompleteTextView.setText(expense.getTag());
@@ -111,10 +124,11 @@ public class SecondActivity extends AppCompatActivity  {
                 radioButtonRUB.setChecked(true);
             }
 
-            RadioButton radioButtonGet = (RadioButton) findViewById(R.id.radio_spend);
+            RadioButton radioButtonSpend = (RadioButton) findViewById(R.id.radio_spend);
             if (expense.isSpend()) {
-                radioButtonGet.setChecked(true);
-            }
+                flag = true;
+                radioButtonSpend.setChecked(true);
+            } else flag = false;
 
             editText.setText(expense.getDate());
         }
@@ -151,9 +165,15 @@ public class SecondActivity extends AppCompatActivity  {
             @Override
             public void onClick(View v) {
                 if (moneyEditText.getText().length() == 0 || autoCompleteTextView.getText().length() == 0) {
+                    if (curExpense != null) {
+                        Intent intent = new Intent();
+                        intent.putExtra(Expense.KEY, curExpense);
+                        intent.putExtra(Expense.POSITION, position);
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }
                     finish();
                 } else {
-                    Intent intent = new Intent();
                     int checkedRadioButtonId = radioGroup.getCheckedRadioButtonId();
                     radioButton = (RadioButton) findViewById(checkedRadioButtonId);
                     checkedRadioButtonId = radioGroupSend.getCheckedRadioButtonId();
@@ -166,7 +186,17 @@ public class SecondActivity extends AppCompatActivity  {
                     exp.setSpend(checkedRadioButtonId == radioButtonSend.getId());
                     exp.setTag(autoCompleteTextView.getText().toString());
 
+                    if (exp.isSpend() != flag) {
+                        exp.setFlagForChangeFragment(true);
+                        Log.v("Far", String.valueOf(exp.isFlagForChangeFragment()));
+                    } else {
+                        exp.setFlagForChangeFragment(false);
+                        Log.v("Far", String.valueOf(exp.isFlagForChangeFragment()));
+                    }
+
+                    Intent intent = new Intent();
                     intent.putExtra(Expense.KEY, exp);
+                    intent.putExtra(Expense.POSITION, position);
                     setResult(RESULT_OK, intent);
                     finish();
                 }
