@@ -20,6 +20,7 @@ import com.example.asusx555l.projecttoolbar.R;
 import com.example.asusx555l.projecttoolbar.beans.Expense;
 import com.example.asusx555l.projecttoolbar.ui.activities.SecondActivity;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -109,12 +110,13 @@ public abstract class BasePage extends Fragment implements ExpensesRecyclerViewA
     }
 
     public void removeMoneyExpense(Expense expense) {
+    }
 
+    public Expense getOldExpense(int position) {
+        return expenseList.get(position);
     }
 
     public void removeExpense(int position) {
-        Log.v("DSD", String.valueOf(position));
-        Log.v("DST", String.valueOf(expenseList.size()));
         expenseList.remove(position);
         mAdapter.notifyDataSetChanged();
     }

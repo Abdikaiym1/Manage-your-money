@@ -174,7 +174,7 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
         } else {
             if (stringToIntegerDate.getDay(expense.getDate()) - Integer.parseInt(simpleDateFormatDay.format(new Date())) <= 6 &&
                     stringToIntegerDate.getMonth(expense.getDate()) == Integer.parseInt(simpleDateFormatMonth.format(new Date()))) {
-                mMoneyIncome = convertToCurValute.convetValute(curVaute, allValueMoney, expense.getCurrency().name());
+                mMoneyIncome = mMoneyIncome.add(convertToCurValute.convetValute(curVaute, allValueMoney, expense.getCurrency().name()));
                 textMoneyMonthI.setText(String.valueOf(mMoneyIncome));
             }
             allTimeMoney = allTimeMoney.add(mMoneyIncome);
@@ -186,6 +186,7 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
     @Override
     public void removeMoneyExpense(Expense expense) {
         super.removeMoneyExpense(expense);
+
     }
 
     public void timeSetIncome() {
