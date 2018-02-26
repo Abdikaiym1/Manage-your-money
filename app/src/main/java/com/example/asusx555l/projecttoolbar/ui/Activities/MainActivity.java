@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.support.v4.view.accessibility.AccessibilityManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.asusx555l.projecttoolbar.ui.ExpensesRecyclerViewAdapter;
 import com.example.asusx555l.projecttoolbar.ui.FragmentAdapter;
@@ -87,10 +89,15 @@ public class MainActivity extends AppCompatActivity {
                 int positionFragment = expense.isSpend() ? 1 : 0;
                 if (fragmentAdapter.getFragment(positionFragment + 1) != null) {
                     if (expense.isFlagForChangeFragment()) {
-                        if (positionFragment == 1)
+                        if (positionFragment == 1) {
+                            Expense oldExpense = fragmentAdapter.getFragment(positionFragment).getOldExpense(positionExpense);
+                            (fragmentAdapter.getFragment(0)).removeMoneyExpense(oldExpense);
                             fragmentAdapter.getFragment(positionFragment).removeExpense(positionExpense);
-                        else
+                        } else {
+                            Expense oldExpense = fragmentAdapter.getFragment(positionFragment + 2).getOldExpense(positionExpense);
+                            (fragmentAdapter.getFragment(0)).removeMoneyExpense(oldExpense);
                             fragmentAdapter.getFragment(positionFragment + 2).removeExpense(positionExpense);
+                        }
                         fragmentAdapter.getFragment(positionFragment + 1).addNewExpense(expense);
                         viewPager.setCurrentItem(positionFragment + 1, true);
                     } else {
