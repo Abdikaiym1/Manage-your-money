@@ -84,27 +84,30 @@ public class MainActivity extends AppCompatActivity {
         } else {
             if (resultCode == RESULT_OK) {
                 Expense expense = (Expense) data.getSerializableExtra(Expense.KEY);
-                (fragmentAdapter.getFragment(0)).getExpense(expense);
                 int positionExpense = data.getIntExtra(Expense.POSITION, 0);
                 int positionFragment = expense.isSpend() ? 1 : 0;
                 if (fragmentAdapter.getFragment(positionFragment + 1) != null) {
+                    Expense oldExpense;
                     if (expense.isFlagForChangeFragment()) {
                         if (positionFragment == 1) {
-                            Expense oldExpense = fragmentAdapter.getFragment(positionFragment).getOldExpense(positionExpense);
-                            (fragmentAdapter.getFragment(0)).removeMoneyExpense(oldExpense);
+                            oldExpense = fragmentAdapter.getFragment(positionFragment).getOldExpense(positionExpense);
                             fragmentAdapter.getFragment(positionFragment).removeExpense(positionExpense);
                         } else {
-                            Expense oldExpense = fragmentAdapter.getFragment(positionFragment + 2).getOldExpense(positionExpense);
-                            (fragmentAdapter.getFragment(0)).removeMoneyExpense(oldExpense);
+                            oldExpense = fragmentAdapter.getFragment(positionFragment + 2).getOldExpense(positionExpense);
                             fragmentAdapter.getFragment(positionFragment + 2).removeExpense(positionExpense);
                         }
+                        (fragmentAdapter.getFragment(0)).removeMoneyExpense(oldExpense);
                         fragmentAdapter.getFragment(positionFragment + 1).addNewExpense(expense);
                         viewPager.setCurrentItem(positionFragment + 1, true);
                     } else {
+                        oldExpense = fragmentAdapter.getFragment(positionFragment + 1).getOldExpense(positionExpense);
+                        (fragmentAdapter.getFragment(0)).removeMoneyExpense(oldExpense);
+
                         fragmentAdapter.getFragment(positionFragment + 1).addNewExpense(expense, positionExpense);
                         viewPager.setCurrentItem(positionFragment + 1, true);
                     }
                 }
+                (fragmentAdapter.getFragment(0)).getExpense(expense);
             }
         }
     }

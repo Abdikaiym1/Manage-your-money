@@ -23,6 +23,7 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.asusx555l.projecttoolbar.HelperForStatisticsPage;
 import com.example.asusx555l.projecttoolbar.R;
 import com.example.asusx555l.projecttoolbar.StringToIntegerDate;
 import com.example.asusx555l.projecttoolbar.ValueToCurrentValue;
@@ -66,7 +67,7 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
     TextView textTitleAllMoney;
     TextView textTitleMoneyName;
     TextView textMoneyMonthI;
-    TextView textMoneyB;
+    TextView textMoneyAll;
 
     private View view;
     private Timer timer;
@@ -83,7 +84,7 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
     private RadioButton radioButtonRUB;
     private String curVaute = RUB;
 
-    private BigDecimal[] dmyMoneyLeave = {BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO};
+    private BigDecimal[] dwmMoneyLeave = {BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO};
     private BigDecimal allTimeMoney = BigDecimal.ZERO;
     private BigDecimal mMoneyIncome = BigDecimal.ZERO;
     private Valute[] valutes = {null, null};
@@ -99,7 +100,7 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
         textMoneyWeekL = view.findViewById(R.id.moneyWeekL);
         textMoneyMonthL = view.findViewById(R.id.moneyMonthL);
         textMoneyMonthI = view.findViewById(R.id.moneyIncomeMonth);
-        textMoneyB = view.findViewById(R.id.allmoney);
+        textMoneyAll = view.findViewById(R.id.allmoney);
 
         radioGroup = view.findViewById(R.id.radioGroupValute);
         radioButtonUSD = view.findViewById(R.id.radio_USDValute);
@@ -137,56 +138,90 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
 
         BigDecimal[] allValueMoney = new BigDecimal[]{valueUSD, valueEUR, expense.getMoney()};
 
+        Log.d("ALL TIME MONEY 1", String.valueOf(allTimeMoney));
         if (expense.isSpend()) {
             if (stringToIntegerDate.getDay(expense.getDate()) == Integer.parseInt(simpleDateFormatDay.format(new Date()))
                     && stringToIntegerDate.getMonth(expense.getDate()) == Integer.parseInt(simpleDateFormatMonth.format(new Date()))
                     ) {
 
                 BigDecimal curMoney = convertToCurValute.convetValute(curVaute, allValueMoney, expense.getCurrency().name());
-                dmyMoneyLeave[0] = dmyMoneyLeave[0].add(curMoney);
-                dmyMoneyLeave[1] = dmyMoneyLeave[1].add(curMoney);
-                dmyMoneyLeave[2] = dmyMoneyLeave[2].add(curMoney);
+                dwmMoneyLeave[0] = dwmMoneyLeave[0].add(curMoney);
+                dwmMoneyLeave[1] = dwmMoneyLeave[1].add(curMoney);
+                dwmMoneyLeave[2] = dwmMoneyLeave[2].add(curMoney);
 
-                textMoneyDayL.setText(String.valueOf(dmyMoneyLeave[0]));
-                textMoneyWeekL.setText(String.valueOf(dmyMoneyLeave[1]));
-                textMoneyMonthL.setText(String.valueOf(dmyMoneyLeave[2]));
+                textMoneyDayL.setText(String.valueOf(dwmMoneyLeave[0]));
+                textMoneyWeekL.setText(String.valueOf(dwmMoneyLeave[1]));
+                textMoneyMonthL.setText(String.valueOf(dwmMoneyLeave[2]));
             } else if (stringToIntegerDate.getDay(expense.getDate()) - Integer.parseInt(simpleDateFormatDay.format(new Date())) <= 6 &&
                     stringToIntegerDate.getMonth(expense.getDate()) == Integer.parseInt(simpleDateFormatMonth.format(new Date()))) {
 
                 BigDecimal curMoney = convertToCurValute.convetValute(curVaute, allValueMoney, expense.getCurrency().name());
-                dmyMoneyLeave[1] = dmyMoneyLeave[1].add(curMoney);
-                dmyMoneyLeave[2] = dmyMoneyLeave[2].add(curMoney);
+                dwmMoneyLeave[1] = dwmMoneyLeave[1].add(curMoney);
+                dwmMoneyLeave[2] = dwmMoneyLeave[2].add(curMoney);
 
-                textMoneyWeekL.setText(String.valueOf(dmyMoneyLeave[1]));
-                textMoneyMonthL.setText(String.valueOf(dmyMoneyLeave[2]));
+                textMoneyWeekL.setText(String.valueOf(dwmMoneyLeave[1]));
+                textMoneyMonthL.setText(String.valueOf(dwmMoneyLeave[2]));
             } else if (stringToIntegerDate.getMonth(expense.getDate())
                     == Integer.parseInt(simpleDateFormatMonth.format(new Date())) &&
                     stringToIntegerDate.getDay(expense.getDate()) - Integer.parseInt(simpleDateFormatDay.format(new Date())) > 6) {
 
                 BigDecimal curMoney = convertToCurValute.convetValute(curVaute, allValueMoney, expense.getCurrency().name());
 
-                dmyMoneyLeave[2] = dmyMoneyLeave[2].add(curMoney);
+                dwmMoneyLeave[2] = dwmMoneyLeave[2].add(curMoney);
 
-                textMoneyMonthL.setText(String.valueOf(dmyMoneyLeave[2]));
+                textMoneyMonthL.setText(String.valueOf(dwmMoneyLeave[2]));
             }
-            allTimeMoney = allTimeMoney.subtract(dmyMoneyLeave[0]);
-            textMoneyB.setText(String.valueOf(allTimeMoney));
+            Log.d("ALL TIME MONEY 2", String.valueOf(allTimeMoney));
+            allTimeMoney = allTimeMoney.subtract(dwmMoneyLeave[0]);
+            textMoneyAll.setText(String.valueOf(allTimeMoney));
         } else {
             if (stringToIntegerDate.getDay(expense.getDate()) - Integer.parseInt(simpleDateFormatDay.format(new Date())) <= 6 &&
                     stringToIntegerDate.getMonth(expense.getDate()) == Integer.parseInt(simpleDateFormatMonth.format(new Date()))) {
                 mMoneyIncome = mMoneyIncome.add(convertToCurValute.convetValute(curVaute, allValueMoney, expense.getCurrency().name()));
                 textMoneyMonthI.setText(String.valueOf(mMoneyIncome));
             }
+            Log.d("ALL TIME MONEY 3", String.valueOf(allTimeMoney));
             allTimeMoney = allTimeMoney.add(mMoneyIncome);
-            textMoneyB.setText(String.valueOf(allTimeMoney));
+            textMoneyAll.setText(String.valueOf(allTimeMoney));
         }
 
     }
 
     @Override
     public void removeMoneyExpense(Expense expense) {
-        super.removeMoneyExpense(expense);
+        BigDecimal valueUSD = new BigDecimal(valutes[0].getValue().replace(",", "."));
+        BigDecimal valueEUR = new BigDecimal(valutes[1].getValue().replace(",", "."));
+        BigDecimal[] allValueMoney = new BigDecimal[]{valueUSD, valueEUR, expense.getMoney()};
+        BigDecimal curMoney = convertToCurValute.convetValute(curVaute, allValueMoney, expense.getCurrency().name());
 
+        //DWM ---- DAY WEEK MONTH
+        super.removeMoneyExpense(expense);
+        HelperForStatisticsPage helperForStatisticsPage = new HelperForStatisticsPage();
+        if (expense.isSpend()) {
+            if (helperForStatisticsPage.defineDWM(expense.getDate()) == 1) {
+                for (int i = 0; i < 3; i++) dwmMoneyLeave[i] = dwmMoneyLeave[i].subtract(curMoney);
+            } else if (helperForStatisticsPage.defineDWM(expense.getDate()) == 2) {
+                for (int i = 1; i < 3; i++) dwmMoneyLeave[i] = dwmMoneyLeave[i].subtract(curMoney);
+            } else if (helperForStatisticsPage.defineDWM(expense.getDate()) == 3) {
+                dwmMoneyLeave[2] = dwmMoneyLeave[2].subtract(curMoney);
+            }
+            textMoneyDayL.setText(String.valueOf(dwmMoneyLeave[0]));
+            textMoneyWeekL.setText(String.valueOf(dwmMoneyLeave[1]));
+            textMoneyMonthL.setText(String.valueOf(dwmMoneyLeave[2]));
+
+            Log.d("ALL TIME MONEY 4", String.valueOf(allTimeMoney));
+            allTimeMoney = allTimeMoney.add(curMoney);
+            textMoneyAll.setText(String.valueOf(allTimeMoney));
+        } else {
+            if (helperForStatisticsPage.defineDWM(expense.getDate()) != 0) {
+                mMoneyIncome = mMoneyIncome.subtract(curMoney);
+            }
+            textMoneyMonthI.setText(String.valueOf(mMoneyIncome));
+
+            Log.d("ALL TIME MONEY 4", String.valueOf(allTimeMoney));
+            allTimeMoney = allTimeMoney.subtract(curMoney);
+            textMoneyAll.setText(String.valueOf(allTimeMoney));
+        }
     }
 
     public void timeSetIncome() {
@@ -259,7 +294,7 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
             BigDecimal[] bigDecimals;
             switch (radioButton.getId()) {
                 case R.id.radio_USDValute:
-                    bigDecimals = convertToCurValute.convertValuteRadioButtonSpend(curVaute, USD, dmyMoneyLeave, valuteMoney);
+                    bigDecimals = convertToCurValute.convertValuteRadioButtonSpend(curVaute, USD, dwmMoneyLeave, valuteMoney);
                     setTextMoneySpend(bigDecimals);
                     bigDecimals = convertToCurValute.convertValuteRadioButtonSpend(curVaute, USD, new BigDecimal[]{mMoneyIncome}, valuteMoney);
                     setTextMoneyIncome(bigDecimals);
@@ -269,7 +304,7 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
                     setTitleMoneyName(USD);
                     break;
                 case R.id.radio_EURValute:
-                    bigDecimals = convertToCurValute.convertValuteRadioButtonSpend(curVaute, EUR, dmyMoneyLeave, valuteMoney);
+                    bigDecimals = convertToCurValute.convertValuteRadioButtonSpend(curVaute, EUR, dwmMoneyLeave, valuteMoney);
                     setTextMoneySpend(bigDecimals);
                     bigDecimals = convertToCurValute.convertValuteRadioButtonSpend(curVaute, EUR, new BigDecimal[]{mMoneyIncome}, valuteMoney);
                     setTextMoneyIncome(bigDecimals);
@@ -279,7 +314,7 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
                     setTitleMoneyName(EUR);
                     break;
                 case R.id.radio_RUBValute:
-                    bigDecimals = convertToCurValute.convertValuteRadioButtonSpend(curVaute, RUB, dmyMoneyLeave, valuteMoney);
+                    bigDecimals = convertToCurValute.convertValuteRadioButtonSpend(curVaute, RUB, dwmMoneyLeave, valuteMoney);
                     setTextMoneySpend(bigDecimals);
                     bigDecimals = convertToCurValute.convertValuteRadioButtonSpend(curVaute, RUB, new BigDecimal[]{mMoneyIncome}, valuteMoney);
                     setTextMoneyIncome(bigDecimals);
@@ -307,7 +342,7 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
         boolean flag = true;
         for (BigDecimal bigDecimal : bigDecimals) if (bigDecimal == null) flag = false;
         if (flag) {
-            dmyMoneyLeave = bigDecimals;
+            dwmMoneyLeave = bigDecimals;
             textMoneyDayL.setText(String.valueOf(bigDecimals[0]));
             textMoneyWeekL.setText(String.valueOf(bigDecimals[1]));
             textMoneyMonthL.setText(String.valueOf(bigDecimals[2]));
@@ -328,7 +363,7 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
         for (BigDecimal bigDecimal : bigDecimals) if (bigDecimal == null) flag = false;
         if (flag) {
             allTimeMoney = bigDecimals[0];
-            textMoneyB.setText(String.valueOf(bigDecimals[0]));
+            textMoneyAll.setText(String.valueOf(bigDecimals[0]));
         }
     }
 }
