@@ -1,18 +1,8 @@
 package com.example.asusx555l.projecttoolbar;
 
-import android.util.Log;
-import android.widget.Toast;
-
-import com.example.asusx555l.projecttoolbar.beans.Expense;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.GregorianCalendar;
-
-/**
- * Created by AsusX555L on 27.02.2018.
- */
 
 public class HelperForStatisticsPage {
 

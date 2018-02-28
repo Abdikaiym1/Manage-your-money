@@ -93,6 +93,7 @@ public class SecondActivity extends AppCompatActivity  {
                     Intent intent = new Intent();
                     intent.putExtra(Expense.KEY, curExpense);
                     intent.putExtra(Expense.POSITION, position);
+                    intent.putExtra(Expense.MAIN_POSITION, getIntent().getIntExtra(Expense.MAIN_POSITION, 0));
                     setResult(RESULT_OK, intent);
                     finish();
                 }
@@ -169,6 +170,7 @@ public class SecondActivity extends AppCompatActivity  {
                         Intent intent = new Intent();
                         intent.putExtra(Expense.KEY, curExpense);
                         intent.putExtra(Expense.POSITION, position);
+                        intent.putExtra(Expense.MAIN_POSITION, getIntent().getIntExtra(Expense.MAIN_POSITION, 0));
                         setResult(RESULT_OK, intent);
                         finish();
                     }
@@ -194,6 +196,7 @@ public class SecondActivity extends AppCompatActivity  {
                     Intent intent = new Intent();
                     intent.putExtra(Expense.KEY, exp);
                     intent.putExtra(Expense.POSITION, position);
+                    intent.putExtra(Expense.MAIN_POSITION, getIntent().getIntExtra(Expense.MAIN_POSITION, 0));
                     setResult(RESULT_OK, intent);
                     finish();
                 }

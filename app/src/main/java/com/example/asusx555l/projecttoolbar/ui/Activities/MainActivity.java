@@ -3,19 +3,14 @@ package com.example.asusx555l.projecttoolbar.ui.activities;
 import android.content.Intent;
 import android.graphics.Color;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v4.view.accessibility.AccessibilityManagerCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
-import com.example.asusx555l.projecttoolbar.ui.ExpensesRecyclerViewAdapter;
+import com.example.asusx555l.projecttoolbar.ObservableArrayList;
 import com.example.asusx555l.projecttoolbar.ui.FragmentAdapter;
 import com.example.asusx555l.projecttoolbar.ui.fragmets.BasePage;
 import com.example.asusx555l.projecttoolbar.ui.fragmets.IncomePage;
@@ -24,21 +19,24 @@ import com.example.asusx555l.projecttoolbar.ui.fragmets.ConsumptionPage;
 import com.example.asusx555l.projecttoolbar.beans.Expense;
 import com.example.asusx555l.projecttoolbar.ui.fragmets.StatisticsPage;
 
-import java.math.BigDecimal;
-import java.util.ArrayList;
+
+import java.util.Arrays;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
 
     FragmentAdapter fragmentAdapter;
     ViewPager viewPager;
-    IncomePage incomePage;
-    ConsumptionPage consumptionPage;
+
+    private ObservableArrayList<Expense> expenseList;
+    private List<BasePage> pages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        expenseList = new ObservableArrayList<>();
 
         Toolbar();
         setupFragment();
@@ -74,49 +72,28 @@ public class MainActivity extends AppCompatActivity {
         if (requestCode == SecondActivity.CODE) {
             if (resultCode == RESULT_OK) {
                 Expense expense = (Expense) data.getSerializableExtra(Expense.KEY);
-                (fragmentAdapter.getFragment(0)).getExpense(expense);
-                int position = expense.isSpend() ? 1 : 0;
-                if (fragmentAdapter.getFragment(position + 1) != null) {
-                    fragmentAdapter.getFragment(position + 1).addNewExpense(expense);
-                    viewPager.setCurrentItem(position + 1, true);
-                }
+                expenseList.add(expense);
+                viewPager.setCurrentItem(expense.isSpend() ? 2 : 1, true);
             }
         } else {
             if (resultCode == RESULT_OK) {
                 Expense expense = (Expense) data.getSerializableExtra(Expense.KEY);
-                int positionExpense = data.getIntExtra(Expense.POSITION, 0);
-                int positionFragment = expense.isSpend() ? 1 : 0;
-                if (fragmentAdapter.getFragment(positionFragment + 1) != null) {
-                    Expense oldExpense;
-                    if (expense.isFlagForChangeFragment()) {
-                        if (positionFragment == 1) {
-                            oldExpense = fragmentAdapter.getFragment(positionFragment).getOldExpense(positionExpense);
-                            fragmentAdapter.getFragment(positionFragment).removeExpense(positionExpense);
-                        } else {
-                            oldExpense = fragmentAdapter.getFragment(positionFragment + 2).getOldExpense(positionExpense);
-                            fragmentAdapter.getFragment(positionFragment + 2).removeExpense(positionExpense);
-                        }
-                        (fragmentAdapter.getFragment(0)).removeMoneyExpense(oldExpense);
-                        fragmentAdapter.getFragment(positionFragment + 1).addNewExpense(expense);
-                        viewPager.setCurrentItem(positionFragment + 1, true);
-                    } else {
-                        oldExpense = fragmentAdapter.getFragment(positionFragment + 1).getOldExpense(positionExpense);
-                        (fragmentAdapter.getFragment(0)).removeMoneyExpense(oldExpense);
-
-                        fragmentAdapter.getFragment(positionFragment + 1).addNewExpense(expense, positionExpense);
-                        viewPager.setCurrentItem(positionFragment + 1, true);
-                    }
-                }
-                (fragmentAdapter.getFragment(0)).getExpense(expense);
+                int positionExpense = data.getIntExtra(Expense.MAIN_POSITION, 0);
+                expenseList.set(positionExpense, expense);
             }
         }
     }
 
     public void setupFragment () {
+        pages = Arrays.asList(new StatisticsPage(), new IncomePage(), new ConsumptionPage());
         fragmentAdapter = new FragmentAdapter(this, getSupportFragmentManager());
-        fragmentAdapter.addFragment(new StatisticsPage());
-        fragmentAdapter.addFragment(new IncomePage());
-        fragmentAdapter.addFragment(new ConsumptionPage());
+
+        for (BasePage page : pages) {
+            fragmentAdapter.addFragment(page);
+            expenseList.addListener(page);
+            page.setExpenses(expenseList);
+        }
+
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         viewPager.setOffscreenPageLimit(3);
         viewPager.setAdapter(fragmentAdapter);

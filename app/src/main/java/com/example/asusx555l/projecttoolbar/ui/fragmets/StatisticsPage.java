@@ -124,15 +124,16 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
         timer = new Timer();
         handler = new Handler();
 
+        expenseList = new ArrayList<>();
+
         timeSetIncome();
         Simple();
 
         return view;
     }
 
-    @Override
-    public void getExpense(Expense expense) {
-        super.getExpense(expense);
+
+    public void addMoneyExpense(Expense expense) {
         BigDecimal valueUSD = new BigDecimal(valutes[0].getValue().replace(",", "."));
         BigDecimal valueEUR = new BigDecimal(valutes[1].getValue().replace(",", "."));
         BigDecimal[] allValueMoney = new BigDecimal[]{valueUSD, valueEUR, expense.getMoney()};
@@ -165,10 +166,9 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
 
     }
 
-    @Override
+
     public void removeMoneyExpense(Expense expense) {
         //DWM ---- DAY WEEK MONTH
-        super.removeMoneyExpense(expense);
         BigDecimal valueUSD = new BigDecimal(valutes[0].getValue().replace(",", "."));
         BigDecimal valueEUR = new BigDecimal(valutes[1].getValue().replace(",", "."));
         BigDecimal[] allValueMoney = new BigDecimal[]{valueUSD, valueEUR, expense.getMoney()};
@@ -257,6 +257,30 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
     @Override
     public void send(Valute[] valute) {
         valutes = valute;
+    }
+
+    @Override
+    public void onItemRemoved(Expense item, int position) {
+        expenseList.remove(item);
+        removeMoneyExpense(item);
+    }
+
+    @Override
+    public void onItemAdded(Expense item, int position) {
+        expenseList.add(position, item);
+        addMoneyExpense(item);
+    }
+
+    @Override
+    public void onItemChanged(Expense item, Expense oldItem, int position) {
+        expenseList.set(position, item);
+        removeMoneyExpense(oldItem);
+        addMoneyExpense(item);
+    }
+
+    @Override
+    protected boolean satisfied(Expense expense) {
+        return true;
     }
 
     View.OnClickListener radioButtonClickVaute = new View.OnClickListener() {

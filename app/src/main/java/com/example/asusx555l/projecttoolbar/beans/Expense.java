@@ -8,6 +8,7 @@ public class Expense implements Serializable {
 
     public static final String KEY = "Expense";
     public static final String POSITION = "Position";
+    public static final String MAIN_POSITION = "Main_Position";
 
     public enum Currency {
         USD, EUR, RUB
