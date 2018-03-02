@@ -8,7 +8,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -24,12 +23,10 @@ import com.example.asusx555l.projecttoolbar.R;
 import com.example.asusx555l.projecttoolbar.beans.Expense;
 
 import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.Objects;
 
-public class SecondActivity extends AppCompatActivity  {
+public class ExpanseAddActivity extends AppCompatActivity  {
 
 
     public static final int CODE = 3434;
@@ -147,7 +144,7 @@ public class SecondActivity extends AppCompatActivity  {
                 int month = calendar.get(Calendar.MONTH);
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
 
-                DatePickerDialog pickerDialog = new DatePickerDialog(SecondActivity.this, R.style.DialogTheme, new DatePickerDialog.OnDateSetListener() {
+                DatePickerDialog pickerDialog = new DatePickerDialog(ExpanseAddActivity.this, R.style.DialogTheme, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker datePicker, int i, int i1, int i2) {
                         editText.setText(i2 + "-" + (i1 + 1) + "-" + i);

@@ -8,6 +8,15 @@ import android.renderscript.Sampler;
 
 public class Valute {
     private String charCode;
+    private String value;
+
+    public Valute(String charCode, String value) {
+        this.charCode = charCode;
+        this.value = value;
+    }
+
+    public Valute() {
+    }
 
     public String getValue() {
         return value;
@@ -16,8 +25,6 @@ public class Valute {
     public void setValue(String value) {
         this.value = value;
     }
-
-    private String value;
 
     public String getCharCode() {
         return charCode;

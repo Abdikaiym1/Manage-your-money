@@ -1,10 +1,8 @@
 package com.example.asusx555l.projecttoolbar.ui.fragmets;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
@@ -16,7 +14,7 @@ import com.example.asusx555l.projecttoolbar.ui.ExpensesRecyclerViewAdapter;
 import com.example.asusx555l.projecttoolbar.ItemTouchHelperClass;
 import com.example.asusx555l.projecttoolbar.R;
 import com.example.asusx555l.projecttoolbar.beans.Expense;
-import com.example.asusx555l.projecttoolbar.ui.activities.SecondActivity;
+import com.example.asusx555l.projecttoolbar.ui.activities.ExpanseAddActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -67,12 +65,12 @@ public abstract class ExpensePage extends BasePage implements ExpensesRecyclerVi
 
     @Override
     public void onItemClick(int position, View view, List<Expense> listItems) {
-        Intent intent = new Intent(getActivity(), SecondActivity.class);
+        Intent intent = new Intent(getActivity(), ExpanseAddActivity.class);
         Expense expense = listItems.get(position);
         intent.putExtra(Expense.KEY, expense);
         intent.putExtra(Expense.MAIN_POSITION, expenses.indexOf(expense));
         intent.putExtra(Expense.POSITION, position);
-        getActivity().startActivityForResult(intent, SecondActivity.BaseCODE);
+        getActivity().startActivityForResult(intent, ExpanseAddActivity.BaseCODE);
     }
 
     @Override

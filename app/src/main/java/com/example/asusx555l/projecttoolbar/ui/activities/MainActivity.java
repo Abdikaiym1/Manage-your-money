@@ -58,8 +58,8 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_add:
-                Intent i = new Intent(this, SecondActivity.class);
-                startActivityForResult(i, SecondActivity.CODE);
+                Intent i = new Intent(this, ExpanseAddActivity.class);
+                startActivityForResult(i, ExpanseAddActivity.CODE);
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
@@ -69,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == SecondActivity.CODE) {
+        if (requestCode == ExpanseAddActivity.CODE) {
             if (resultCode == RESULT_OK) {
                 Expense expense = (Expense) data.getSerializableExtra(Expense.KEY);
                 expenseList.add(expense);

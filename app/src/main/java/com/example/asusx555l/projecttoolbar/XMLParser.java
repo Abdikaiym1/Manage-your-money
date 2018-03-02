@@ -37,7 +37,8 @@ import javax.xml.parsers.ParserConfigurationException;
 public class XMLParser extends AsyncTask<Object, Valute, Integer> {
 
     private String URLDate = "http://www.cbr.ru/scripts/XML_daily.asp?date_req=";
-    public Valute[] valute = new Valute[2];
+    private Valute[] valute = new Valute[2];
+    private String localCondition;
 
     public XMLParser(SendResult sendResult, String date) {
         this.sendResult = sendResult;
@@ -47,6 +48,7 @@ public class XMLParser extends AsyncTask<Object, Valute, Integer> {
     @Override
     protected Integer doInBackground(Object[] params) {
         XmlPullParser receivedDate = tryDownloadingXmlDate();
+        if (isCancelled()) return null;
         int recordsFound = tryParsingXmlDate(receivedDate);
         return recordsFound;
     }
@@ -62,6 +64,34 @@ public class XMLParser extends AsyncTask<Object, Valute, Integer> {
             }
         }
         return 0;
+    }
+
+    private XmlPullParser tryDownloadingXmlDate() {
+        try {
+            URL xmlUrl = new URL(URLDate);
+            XmlPullParser receivedDate = XmlPullParserFactory.newInstance().newPullParser();
+            receivedDate.setInput(xmlUrl.openStream(), null);
+            return receivedDate;
+        } catch (XmlPullParserException e) {
+            e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+            cancel(false);
+        }
+        return null;
+    }
+
+    @Override
+    protected void onCancelled() {
+        super.onCancelled();
+        sendResult.caution("IOException");
+    }
+
+    @Override
+    protected void onPreExecute() {
+        super.onPreExecute();
     }
 
     private int processRecivedDate(XmlPullParser xmlDate) throws IOException, XmlPullParserException {
@@ -108,22 +138,6 @@ public class XMLParser extends AsyncTask<Object, Valute, Integer> {
         return recordsFound;
     }
 
-    private XmlPullParser tryDownloadingXmlDate() {
-        try {
-            URL xmlUrl = new URL(URLDate);
-            XmlPullParser receivedDate = XmlPullParserFactory.newInstance().newPullParser();
-            receivedDate.setInput(xmlUrl.openStream(), null);
-            return receivedDate;
-        } catch (XmlPullParserException e) {
-            e.printStackTrace();
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
     @Override
     protected void onProgressUpdate(Valute... values) {
         super.onProgressUpdate(values);
@@ -141,6 +155,7 @@ public class XMLParser extends AsyncTask<Object, Valute, Integer> {
 
     public interface SendResult {
         void send(Valute[] valute);
+        void caution(String s);
     }
 
 
@@ -150,3 +165,4 @@ public class XMLParser extends AsyncTask<Object, Valute, Integer> {
         sendResult.send(valute);
     }
 }
+

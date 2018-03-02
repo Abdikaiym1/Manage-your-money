@@ -1,23 +1,16 @@
 package com.example.asusx555l.projecttoolbar.ui.fragmets;
 
 
-import android.content.Intent;
 import android.graphics.Color;
-import android.graphics.PorterDuff;
-import android.graphics.PorterDuffColorFilter;
-import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.Fragment;
-import android.support.v4.content.ContextCompat;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
@@ -30,30 +23,19 @@ import com.example.asusx555l.projecttoolbar.ValueToCurrentValue;
 import com.example.asusx555l.projecttoolbar.Valute;
 import com.example.asusx555l.projecttoolbar.XMLParser;
 import com.example.asusx555l.projecttoolbar.beans.Expense;
-import com.example.asusx555l.projecttoolbar.ui.activities.SecondActivity;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.NodeList;
-
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import static java.lang.Math.E;
 import static java.lang.Math.abs;
 
 
 public class StatisticsPage extends BasePage implements XMLParser.SendResult {
 
-    private static final String FormatTIME = "HH";
-    private static final String FormatDAY = "dd";
-    private static final String FormatMonth = "MM";
-    private static final String RESET = "0.00";
     private static final String DATE = "dd-MM-yyyy";
     private static final String USD = "USD";
     private static final String EUR = "EUR";
@@ -70,24 +52,19 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
     TextView textMoneyAll;
 
     private View view;
-    private Timer timer;
-    private TimerTask timerTask;
-    private Handler handler;
-    private SimpleDateFormat simpleDateFormat;
-    private SimpleDateFormat simpleDateFormatDay;
-    private SimpleDateFormat simpleDateFormatMonth;
     private SimpleDateFormat simpleDate;
-    private int lastDay, lastMonth;
     private RadioGroup radioGroup;
     private RadioButton radioButtonUSD;
     private RadioButton radioButtonEUR;
     private RadioButton radioButtonRUB;
     private String curVaute = RUB;
+    private enum StateXML {IOException}
+    private StateXML stateXML;
 
     private BigDecimal[] dwmMoneyLeave = {BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO};
     private BigDecimal allTimeMoney = BigDecimal.ZERO;
     private BigDecimal mMoneyIncome = BigDecimal.ZERO;
-    private Valute[] valutes = {null, null};
+    private Valute[] valutes;
     private ValueToCurrentValue convertToCurValute = new ValueToCurrentValue();
 
     private StringToIntegerDate stringToIntegerDate = new StringToIntegerDate();
@@ -107,9 +84,6 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
         radioButtonEUR = view.findViewById(R.id.radio_EURValute);
         radioButtonRUB = view.findViewById(R.id.radio_RUBValute);
 
-        simpleDateFormat = new SimpleDateFormat(FormatTIME);
-        simpleDateFormatDay = new SimpleDateFormat(FormatDAY);
-        simpleDateFormatMonth = new SimpleDateFormat(FormatMonth);
         simpleDate = new SimpleDateFormat(DATE);
 
         textTitleMonth = view.findViewById(R.id.title_income);
@@ -120,18 +94,10 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
         gradientDrawable = (GradientDrawable) textTitleAllMoney.getBackground().mutate();
         gradientDrawable.setColor(Color.rgb(255, 153, 153));
 
-
-        timer = new Timer();
-        handler = new Handler();
-
         expenseList = new ArrayList<>();
-
-        timeSetIncome();
-        Simple();
 
         return view;
     }
-
 
     public void addMoneyExpense(Expense expense) {
         BigDecimal valueUSD = new BigDecimal(valutes[0].getValue().replace(",", "."));
@@ -200,63 +166,34 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
         }
     }
 
-    public void timeSetIncome() {
-        timerTask = new TimerTask() {
-            @Override
-            public void run() {
-                handler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        textMoneyDayL.setText(RESET);
-                        if (stringToIntegerDate.dayOfWeek(simpleDate.format(new Date())) == 2)
-                            textMoneyWeekL.setText(RESET);
-                        if (Integer.parseInt(simpleDateFormatDay.format(new Date())) == 1)
-                            textMoneyMonthL.setText(RESET);
-                    }
-                });
-            }
-        };
-    }
-
-    public void Simple() {
-        int diffTime = (24 - Integer.parseInt(simpleDateFormat.format(new Date()))) * 60 * 60 * 1000;
-        int curDay = Integer.parseInt(simpleDateFormatDay.format(new Date()));
-        int curMonth = Integer.parseInt(simpleDateFormatMonth.format(new Date()));
-        if (abs(lastDay - curDay) != 0 && lastMonth - curMonth == 0) {
-            textMoneyDayL.setText(RESET);
-        } else if (abs(curDay - lastDay) <= 6 && lastMonth - curMonth == 0) {
-            textMoneyDayL.setText(RESET);
-            textMoneyWeekL.setText(RESET);
-        } else {
-            textMoneyWeekL.setText(RESET);
-            textMoneyDayL.setText(RESET);
-            textMoneyMonthL.setText(RESET);
-        }
-        timer.schedule(timerTask, diffTime, 24 * 60 * 60 * 1000);
-    }
-
     @Override
-    public void onDestroy() {
-        lastDay = Integer.parseInt(simpleDateFormatDay.format(new Date()));
-        lastMonth = Integer.parseInt(simpleDateFormatMonth.format(new Date()));
-        super.onDestroy();
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-
+    public void onStart() {
+        super.onStart();
         XMLParser xmlParser = new XMLParser(StatisticsPage.this, simpleDate.format(new Date()));
         xmlParser.execute();
         radioButtonUSD.setOnClickListener(radioButtonClickVaute);
         radioButtonEUR.setOnClickListener(radioButtonClickVaute);
         radioButtonRUB.setOnClickListener(radioButtonClickVaute);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    public void send(Valute[] valutes) {
+        this.valutes = valutes;
 
     }
 
     @Override
-    public void send(Valute[] valute) {
-        valutes = valute;
+    public void caution(String string) {
+        if (Objects.equals(string, StateXML.IOException.toString())) {
+            stateXML = StateXML.IOException;
+        }
+        Log.d("caution", "yes");
+        valutes = new Valute[]{new Valute("USD", "56,4334"), new Valute("EUR", "68,8826")};
     }
 
     @Override
