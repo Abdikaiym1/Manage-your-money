@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/error_text"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily = "sans-serif"
+        android:text="@string/error_text"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:paddingTop="5dp"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:paddingTop="5dp">
+
+        <CheckBox
+            android:id="@+id/checkbox_default"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:theme="@style/CheckBox"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-light"
+            android:textSize="14sp"
+            android:text="@string/rate_CheckBox_text"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="24dp"
+        android:paddingRight="24dp"
+        android:gravity="center">
+
+        <EditText
+            android:id="@+id/rate_usd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/rate_USD"
+            android:layout_weight="1"
+            android:inputType="numberDecimal"
+            android:fontFamily = "sans-serif"
+            android:layout_marginRight="5dp"/>
+
+        <EditText
+            android:id="@+id/rate_euro"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:hint="@string/rate_EUR"
+            android:layout_weight="1"
+            android:inputType="numberDecimal"
+            android:fontFamily = "sans-serif"
+            android:layout_marginRight="5dp"/>
+
+    </LinearLayout>
+
+</LinearLayout>

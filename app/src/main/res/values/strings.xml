@@ -9,4 +9,8 @@
     <string name="RUB">RUB</string>
     <string name="Spend">Потрачено</string>
     <string name="Income">Заработана</string>
+    <string name="error_text">Задайте курс доллара и евро по рублю для дальнейшей работы.</string>
+    <string name="rate_USD">Курс USD</string>
+    <string name="rate_EUR">Курс EUR</string>
+    <string name="rate_CheckBox_text">Сделать курс по умолчанию</string>
 </resources>

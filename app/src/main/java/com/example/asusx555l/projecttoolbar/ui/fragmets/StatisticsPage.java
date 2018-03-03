@@ -23,6 +23,7 @@ import com.example.asusx555l.projecttoolbar.ValueToCurrentValue;
 import com.example.asusx555l.projecttoolbar.Valute;
 import com.example.asusx555l.projecttoolbar.XMLParser;
 import com.example.asusx555l.projecttoolbar.beans.Expense;
+import com.example.asusx555l.projecttoolbar.ui.NotifyDialogFragment;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ import java.util.TimerTask;
 import static java.lang.Math.abs;
 
 
-public class StatisticsPage extends BasePage implements XMLParser.SendResult {
+public class StatisticsPage extends BasePage implements XMLParser.SendResult , NotifyDialogFragment.RateDialogListener{
 
     private static final String DATE = "dd-MM-yyyy";
     private static final String USD = "USD";
@@ -95,6 +96,11 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
         gradientDrawable.setColor(Color.rgb(255, 153, 153));
 
         expenseList = new ArrayList<>();
+
+        xmlParser();
+        radioButtonUSD.setOnClickListener(radioButtonClickVaute);
+        radioButtonEUR.setOnClickListener(radioButtonClickVaute);
+        radioButtonRUB.setOnClickListener(radioButtonClickVaute);
 
         return view;
     }
@@ -166,19 +172,9 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
         }
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
+    private void xmlParser() {
         XMLParser xmlParser = new XMLParser(StatisticsPage.this, simpleDate.format(new Date()));
         xmlParser.execute();
-        radioButtonUSD.setOnClickListener(radioButtonClickVaute);
-        radioButtonEUR.setOnClickListener(radioButtonClickVaute);
-        radioButtonRUB.setOnClickListener(radioButtonClickVaute);
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
     }
 
     @Override
@@ -192,8 +188,25 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult {
         if (Objects.equals(string, StateXML.IOException.toString())) {
             stateXML = StateXML.IOException;
         }
-        Log.d("caution", "yes");
-        valutes = new Valute[]{new Valute("USD", "56,4334"), new Valute("EUR", "68,8826")};
+        openDialog();
+    }
+
+    @Override
+    public void applyRate(String valueUSD, String valueEUR) {
+        valutes = new Valute[]{new Valute("USD", valueUSD), new Valute("EUR", valueEUR)};
+    }
+
+    @Override
+    public void isDefaultRate(boolean check) {
+        if (check) valutes = new Valute[]{new Valute("USD", "56,4334"), new Valute("EUR", "68,8826")};
+    }
+
+
+    public void openDialog() {
+        NotifyDialogFragment notifyDialogFragment = new NotifyDialogFragment(this);
+        notifyDialogFragment.setCancelable(false);
+        notifyDialogFragment.show(getFragmentManager(), "NotifyDialogFragment");
+
     }
 
     @Override

@@ -93,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
             expenseList.addListener(page);
             page.setExpenses(expenseList);
         }
-        //аххуен
+
         viewPager = (ViewPager) findViewById(R.id.viewPager);
         viewPager.setOffscreenPageLimit(3);
         viewPager.setAdapter(fragmentAdapter);
