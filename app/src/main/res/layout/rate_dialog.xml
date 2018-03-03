@@ -52,7 +52,8 @@
             android:layout_weight="1"
             android:inputType="numberDecimal"
             android:fontFamily = "sans-serif"
-            android:layout_marginRight="5dp"/>
+            android:layout_marginRight="5dp"
+            />
 
         <EditText
             android:id="@+id/rate_euro"

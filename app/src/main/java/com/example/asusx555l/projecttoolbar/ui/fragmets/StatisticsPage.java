@@ -193,7 +193,14 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult , N
 
     @Override
     public void applyRate(String valueUSD, String valueEUR) {
-        valutes = new Valute[]{new Valute("USD", valueUSD), new Valute("EUR", valueEUR)};
+        if (valueEUR.isEmpty() || valueUSD.isEmpty()) {
+            NotifyDialogFragment notifyDialogFragment = new NotifyDialogFragment(this);
+            notifyDialogFragment.setCancelable(false);
+            notifyDialogFragment.show(getFragmentManager(), "NotifyDialogFragment");
+            Toast.makeText(getContext(), R.string.caution_alert_dialog, Toast.LENGTH_SHORT).show();
+        } else {
+            valutes = new Valute[]{new Valute("USD", valueUSD), new Valute("EUR", valueEUR)};
+        }
     }
 
     @Override

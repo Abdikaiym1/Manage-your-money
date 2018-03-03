@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.asusx555l.projecttoolbar.R;
 
@@ -32,13 +33,14 @@ public class NotifyDialogFragment extends AppCompatDialogFragment {
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         //return super.onCreateDialog(savedInstanceState);
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        final AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
         LayoutInflater inflater = getActivity().getLayoutInflater();
         View view = inflater.inflate(R.layout.rate_dialog, null);
 
-        builder.setView(view).setTitle("Нет подключение к сети")
-        .setPositiveButton("ok", new DialogInterface.OnClickListener() {
+        builder.setView(view).setTitle("Нет подключение к сети");
+
+        builder.setView(view).setPositiveButton("ok", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i) {
                 if (checkBoxDefault.isChecked()) {
@@ -51,9 +53,33 @@ public class NotifyDialogFragment extends AppCompatDialogFragment {
             }
         });
 
+
+
         editTextRateEURO = view.findViewById(R.id.rate_euro);
         editTextRateUSD = view.findViewById(R.id.rate_usd);
         checkBoxDefault = view.findViewById(R.id.checkbox_default);
+
+        checkBoxDefault.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (checkBoxDefault.isChecked()) {
+                    editTextRateEURO.setFocusable(false);
+                    editTextRateEURO.setEnabled(false);
+                    editTextRateEURO.clearComposingText();
+                    editTextRateEURO.setText("");
+                    editTextRateUSD.setFocusable(false);
+                    editTextRateUSD.setEnabled(false);
+                    editTextRateUSD.setText("");
+                } else {
+                    editTextRateUSD.setFocusableInTouchMode(true);
+                    editTextRateUSD.setFocusable(true);
+                    editTextRateUSD.setEnabled(true);
+                    editTextRateEURO.setFocusableInTouchMode(true);
+                    editTextRateEURO.setFocusable(true);
+                    editTextRateEURO.setEnabled(true);
+                }
+            }
+        });
 
         return builder.create();
     }

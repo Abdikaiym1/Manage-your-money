@@ -13,4 +13,5 @@
     <string name="rate_USD">Курс USD</string>
     <string name="rate_EUR">Курс EUR</string>
     <string name="rate_CheckBox_text">Сделать курс по умолчанию</string>
+    <string name="caution_alert_dialog">Заполните свободные поля или выберите по умолчанию</string>
 </resources>
