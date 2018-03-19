@@ -9,6 +9,9 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
@@ -68,7 +71,6 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult , N
     private Valute[] valutes;
     private ValueToCurrentValue convertToCurValute = new ValueToCurrentValue();
 
-    private StringToIntegerDate stringToIntegerDate = new StringToIntegerDate();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -102,7 +104,15 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult , N
         radioButtonEUR.setOnClickListener(radioButtonClickVaute);
         radioButtonRUB.setOnClickListener(radioButtonClickVaute);
 
+        setHasOptionsMenu(true);
+
         return view;
+    }
+
+    @Override
+    public void onPrepareOptionsMenu(Menu menu) {
+        super.onPrepareOptionsMenu(menu);
+        menu.findItem(R.id.filter_elements).setVisible(false);
     }
 
     public void addMoneyExpense(Expense expense) {
@@ -192,7 +202,7 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult , N
     }
 
     @Override
-    public void applyRate(String valueUSD, String valueEUR) {
+        public void applyRate(String valueUSD, String valueEUR) {
         if (valueEUR.isEmpty() || valueUSD.isEmpty()) {
             NotifyDialogFragment notifyDialogFragment = new NotifyDialogFragment(this);
             notifyDialogFragment.setCancelable(false);

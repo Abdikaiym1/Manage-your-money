@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.asusx555l.projecttoolbar.ObservableArrayList;
 import com.example.asusx555l.projecttoolbar.ui.FragmentAdapter;
@@ -61,6 +62,8 @@ public class MainActivity extends AppCompatActivity {
                 Intent i = new Intent(this, ExpanseAddActivity.class);
                 startActivityForResult(i, ExpanseAddActivity.CODE);
                 return true;
+            case R.id.filter_elements:
+                return false;
             default:
                 return super.onOptionsItemSelected(item);
         }

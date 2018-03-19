@@ -1,15 +1,23 @@
 package com.example.asusx555l.projecttoolbar.ui.fragmets;
 
+
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.example.asusx555l.projecttoolbar.FullScreenDialogOfFilter;
 import com.example.asusx555l.projecttoolbar.ui.ExpensesRecyclerViewAdapter;
 import com.example.asusx555l.projecttoolbar.ItemTouchHelperClass;
 import com.example.asusx555l.projecttoolbar.R;
@@ -48,6 +56,31 @@ public abstract class ExpensePage extends BasePage implements ExpensesRecyclerVi
 
         setHasOptionsMenu(true);
         return view;
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        super.onCreateOptionsMenu(menu, inflater);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.filter_elements:
+                showFullScreenDialog();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    private void showFullScreenDialog() {
+        FragmentManager fragmentManager = getFragmentManager();
+        FullScreenDialogOfFilter fullScreenDialogOfFilter = new FullScreenDialogOfFilter();
+
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
+        transaction.add(android.R.id.content, fullScreenDialogOfFilter).commit();
     }
 
     @Override
@@ -104,4 +137,6 @@ public abstract class ExpensePage extends BasePage implements ExpensesRecyclerVi
     }
 
     protected abstract boolean satisfied(Expense expense);
+
+
 }

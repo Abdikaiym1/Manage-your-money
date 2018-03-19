@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Manage_your_money.iml" filepath="$PROJECT_DIR$/Manage_your_money.iml" />
-      <module fileurl="file://C:\Users\XStrike\StudioProjects\Manage_your_money\ProjectToolbar.iml" filepath="C:\Users\XStrike\StudioProjects\Manage_your_money\ProjectToolbar.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
     </modules>
   </component>
