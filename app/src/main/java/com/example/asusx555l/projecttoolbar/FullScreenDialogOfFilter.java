@@ -12,6 +12,7 @@ import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -34,6 +35,7 @@ public class FullScreenDialogOfFilter extends DialogFragment {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setHomeButtonEnabled(true);
             actionBar.setHomeAsUpIndicator(R.drawable.ic_close);
+            actionBar.setTitle("Сортировка");
         }
 
         setHasOptionsMenu(true);
@@ -52,6 +54,18 @@ public class FullScreenDialogOfFilter extends DialogFragment {
         menu.findItem(R.id.filter_elements).setVisible(false);
         menu.findItem(R.id.action_add).setVisible(false);
         menu.findItem(R.id.action_setting).setVisible(false);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.action_ok :
+                return true;
+            case android.R.id.home:
+                dismiss();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Override

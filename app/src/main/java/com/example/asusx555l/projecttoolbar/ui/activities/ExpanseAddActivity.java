@@ -132,7 +132,7 @@ public class ExpanseAddActivity extends AppCompatActivity  {
         }
     }
 
-    public void setupDateFun() { //simple test for GIT
+    public void setupDateFun() {
         editText = (EditText)findViewById(R.id.dateEditText);
         calendar = Calendar.getInstance();
         editText.setText(calendar.get(Calendar.DAY_OF_MONTH) + "-" + (calendar.get(Calendar.MONTH) + 1) + "-" + calendar.get(Calendar.YEAR));
