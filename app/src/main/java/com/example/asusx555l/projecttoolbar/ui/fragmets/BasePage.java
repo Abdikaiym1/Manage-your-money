@@ -3,6 +3,7 @@ package com.example.asusx555l.projecttoolbar.ui.fragmets;
 import android.support.v4.app.Fragment;
 
 import com.example.asusx555l.projecttoolbar.ObservableArrayList;
+import com.example.asusx555l.projecttoolbar.Valute;
 import com.example.asusx555l.projecttoolbar.beans.Expense;
 import java.util.List;
 
@@ -10,6 +11,7 @@ public abstract class BasePage extends Fragment implements ObservableArrayList.O
 
     protected List<Expense> expenseList;
     protected ObservableArrayList<Expense> expenses;
+    protected Valute[] valutes;
 
     public void setExpenses(ObservableArrayList<Expense> expenses) {
         this.expenses = expenses;

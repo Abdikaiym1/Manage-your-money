@@ -5,13 +5,8 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.icu.text.SimpleDateFormat;
 import android.os.Bundle;
-import android.os.Handler;
-import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.RadioButton;
@@ -21,7 +16,6 @@ import android.widget.Toast;
 
 import com.example.asusx555l.projecttoolbar.HelperForStatisticsPage;
 import com.example.asusx555l.projecttoolbar.R;
-import com.example.asusx555l.projecttoolbar.StringToIntegerDate;
 import com.example.asusx555l.projecttoolbar.ValueToCurrentValue;
 import com.example.asusx555l.projecttoolbar.Valute;
 import com.example.asusx555l.projecttoolbar.XMLParser;
@@ -32,8 +26,6 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
 
 import static java.lang.Math.abs;
 
@@ -68,7 +60,6 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult , N
     private BigDecimal[] dwmMoneyLeave = {BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO};
     private BigDecimal allTimeMoney = BigDecimal.ZERO;
     private BigDecimal mMoneyIncome = BigDecimal.ZERO;
-    private Valute[] valutes;
     private ValueToCurrentValue convertToCurValute = new ValueToCurrentValue();
 
 
@@ -119,7 +110,7 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult , N
         BigDecimal valueUSD = new BigDecimal(valutes[0].getValue().replace(",", "."));
         BigDecimal valueEUR = new BigDecimal(valutes[1].getValue().replace(",", "."));
         BigDecimal[] allValueMoney = new BigDecimal[]{valueUSD, valueEUR, expense.getMoney()};
-        BigDecimal curMoney = convertToCurValute.convetValute(curVaute, allValueMoney, expense.getCurrency().name());
+        BigDecimal curMoney = convertToCurValute.convertValute(curVaute, allValueMoney, expense.getCurrency().name());
 
         HelperForStatisticsPage helperForStatisticsPage = new HelperForStatisticsPage();
         if (expense.isSpend()) {
@@ -154,7 +145,7 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult , N
         BigDecimal valueUSD = new BigDecimal(valutes[0].getValue().replace(",", "."));
         BigDecimal valueEUR = new BigDecimal(valutes[1].getValue().replace(",", "."));
         BigDecimal[] allValueMoney = new BigDecimal[]{valueUSD, valueEUR, expense.getMoney()};
-        BigDecimal curMoney = convertToCurValute.convetValute(curVaute, allValueMoney, expense.getCurrency().name());
+        BigDecimal curMoney = convertToCurValute.convertValute(curVaute, allValueMoney, expense.getCurrency().name());
 
         HelperForStatisticsPage helperForStatisticsPage = new HelperForStatisticsPage();
         if (expense.isSpend()) {
@@ -190,7 +181,7 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult , N
     @Override
     public void send(Valute[] valutes) {
         this.valutes = valutes;
-
+        
     }
 
     @Override

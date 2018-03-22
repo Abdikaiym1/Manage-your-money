@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import com.example.asusx555l.projecttoolbar.ValueToCurrentValue;
 import com.example.asusx555l.projecttoolbar.ui.FullScreenDialogOfFilter;
 import com.example.asusx555l.projecttoolbar.ui.ExpensesRecyclerViewAdapter;
 import com.example.asusx555l.projecttoolbar.ItemTouchHelperClass;
@@ -24,7 +25,13 @@ import com.example.asusx555l.projecttoolbar.R;
 import com.example.asusx555l.projecttoolbar.beans.Expense;
 import com.example.asusx555l.projecttoolbar.ui.activities.ExpanseAddActivity;
 
+import java.math.BigDecimal;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 
@@ -141,14 +148,62 @@ public abstract class ExpensePage extends BasePage implements ExpensesRecyclerVi
 
     @Override
     public void sortSignal(String nameOfParameter) {
+        final DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+        /*final ValueToCurrentValue valueToCurrentValue = new ValueToCurrentValue();
+
+        final BigDecimal valueUSD = new BigDecimal(valutes[0].getValue().replace(",", "."));
+        final BigDecimal valueEUR = new BigDecimal(valutes[1].getValue().replace(",", "."));*/
+
         if (Objects.equals(nameOfParameter, "Сначала минимальные")) {
-            Toast.makeText(getActivity(), nameOfParameter, Toast.LENGTH_SHORT).show();
+            Collections.sort(expenseList, new Comparator<Expense>() {
+                @Override
+                public int compare(Expense expense, Expense t1) {
+                    /*BigDecimal[] allValueMoney = new BigDecimal[]{valueUSD, valueEUR, expense.getMoney()};
+
+                    BigDecimal bigDecimalFIRST = valueToCurrentValue.convertValute("RUB", allValueMoney, expense.getCurrency().name());
+                    allValueMoney[2] = t1.getMoney();
+                    BigDecimal bigDecimalSECOND = valueToCurrentValue.convertValute("RUB", allValueMoney, expense.getCurrency().name());
+
+                    return (bigDecimalFIRST.subtract(bigDecimalSECOND)).intValue() >= 0 ? 1 : -1;*/
+
+                    return (expense.getMoney().subtract(t1.getMoney())).intValue() >= 0 ? 1 : -1;
+                }
+            });
+            mAdapter.notifyDataSetChanged();
         } else if (Objects.equals(nameOfParameter, "Сначала максимальные")) {
-            Toast.makeText(getActivity(), nameOfParameter, Toast.LENGTH_SHORT).show();
+            Collections.sort(expenseList, new Comparator<Expense>() {
+                @Override
+                public int compare(Expense expense, Expense t1) {
+                    return (expense.getMoney().subtract(t1.getMoney())).intValue() >= 0 ? -1 : 1;
+                }
+            });
+            mAdapter.notifyDataSetChanged();
         } else if (Objects.equals(nameOfParameter, "Новые по дате сверху")) {
-            Toast.makeText(getActivity(), nameOfParameter, Toast.LENGTH_SHORT).show();
+            Collections.sort(expenseList, new Comparator<Expense>() {
+                @Override
+                public int compare(Expense expense, Expense t1) {
+                    try {
+                        return dateFormat.parse(expense.getDate()).compareTo(dateFormat.parse(t1.getDate()));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    return 0;
+                }
+            });
+            mAdapter.notifyDataSetChanged();
         } else {
-            Toast.makeText(getActivity(), nameOfParameter, Toast.LENGTH_SHORT).show();
+            Collections.sort(expenseList, new Comparator<Expense>() {
+                @Override
+                public int compare(Expense expense, Expense t1) {
+                    try {
+                        return dateFormat.parse(t1.getDate()).compareTo(dateFormat.parse(expense.getDate()));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                    return 0;
+                }
+            });
+            mAdapter.notifyDataSetChanged();
         }
 
     }
