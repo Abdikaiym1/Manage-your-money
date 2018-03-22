@@ -17,7 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.asusx555l.projecttoolbar.FullScreenDialogOfFilter;
+import com.example.asusx555l.projecttoolbar.ui.FullScreenDialogOfFilter;
 import com.example.asusx555l.projecttoolbar.ui.ExpensesRecyclerViewAdapter;
 import com.example.asusx555l.projecttoolbar.ItemTouchHelperClass;
 import com.example.asusx555l.projecttoolbar.R;
@@ -26,8 +26,9 @@ import com.example.asusx555l.projecttoolbar.ui.activities.ExpanseAddActivity;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public abstract class ExpensePage extends BasePage implements ExpensesRecyclerViewAdapter.ItemTouchListener {
+public abstract class ExpensePage extends BasePage implements ExpensesRecyclerViewAdapter.ItemTouchListener, FullScreenDialogOfFilter.FullScreenDialogListener {
 
     private RecyclerView mRecyclerView;
     protected RecyclerView.Adapter mAdapter;
@@ -76,7 +77,7 @@ public abstract class ExpensePage extends BasePage implements ExpensesRecyclerVi
 
     private void showFullScreenDialog() {
         FragmentManager fragmentManager = getFragmentManager();
-        FullScreenDialogOfFilter fullScreenDialogOfFilter = new FullScreenDialogOfFilter();
+        FullScreenDialogOfFilter fullScreenDialogOfFilter = new FullScreenDialogOfFilter(this);
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN);
@@ -138,5 +139,17 @@ public abstract class ExpensePage extends BasePage implements ExpensesRecyclerVi
 
     protected abstract boolean satisfied(Expense expense);
 
+    @Override
+    public void sortSignal(String nameOfParameter) {
+        if (Objects.equals(nameOfParameter, "Сначала минимальные")) {
+            Toast.makeText(getActivity(), nameOfParameter, Toast.LENGTH_SHORT).show();
+        } else if (Objects.equals(nameOfParameter, "Сначала максимальные")) {
+            Toast.makeText(getActivity(), nameOfParameter, Toast.LENGTH_SHORT).show();
+        } else if (Objects.equals(nameOfParameter, "Новые по дате сверху")) {
+            Toast.makeText(getActivity(), nameOfParameter, Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getActivity(), nameOfParameter, Toast.LENGTH_SHORT).show();
+        }
 
+    }
 }
