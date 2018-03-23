@@ -9,6 +9,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.helper.ItemTouchHelper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -149,24 +150,24 @@ public abstract class ExpensePage extends BasePage implements ExpensesRecyclerVi
     @Override
     public void sortSignal(String nameOfParameter) {
         final DateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
-        /*final ValueToCurrentValue valueToCurrentValue = new ValueToCurrentValue();
+        final ValueToCurrentValue valueToCurrentValue = new ValueToCurrentValue();
 
         final BigDecimal valueUSD = new BigDecimal(valutes[0].getValue().replace(",", "."));
-        final BigDecimal valueEUR = new BigDecimal(valutes[1].getValue().replace(",", "."));*/
+        final BigDecimal valueEUR = new BigDecimal(valutes[1].getValue().replace(",", "."));
 
         if (Objects.equals(nameOfParameter, "Сначала минимальные")) {
             Collections.sort(expenseList, new Comparator<Expense>() {
                 @Override
                 public int compare(Expense expense, Expense t1) {
-                    /*BigDecimal[] allValueMoney = new BigDecimal[]{valueUSD, valueEUR, expense.getMoney()};
+                    BigDecimal[] allValueMoney = new BigDecimal[]{valueUSD, valueEUR, expense.getMoney()};
 
                     BigDecimal bigDecimalFIRST = valueToCurrentValue.convertValute("RUB", allValueMoney, expense.getCurrency().name());
+                    Log.d("sortSignal11", bigDecimalFIRST.toString());
                     allValueMoney[2] = t1.getMoney();
-                    BigDecimal bigDecimalSECOND = valueToCurrentValue.convertValute("RUB", allValueMoney, expense.getCurrency().name());
+                    BigDecimal bigDecimalSECOND = valueToCurrentValue.convertValute("RUB", allValueMoney, t1.getCurrency().name());
+                    Log.d("sortSignal22", bigDecimalSECOND.toString());
 
-                    return (bigDecimalFIRST.subtract(bigDecimalSECOND)).intValue() >= 0 ? 1 : -1;*/
-
-                    return (expense.getMoney().subtract(t1.getMoney())).intValue() >= 0 ? 1 : -1;
+                    return (bigDecimalFIRST.subtract(bigDecimalSECOND)).intValue() >= 0 ? 1 : -1;
                 }
             });
             mAdapter.notifyDataSetChanged();
@@ -174,7 +175,15 @@ public abstract class ExpensePage extends BasePage implements ExpensesRecyclerVi
             Collections.sort(expenseList, new Comparator<Expense>() {
                 @Override
                 public int compare(Expense expense, Expense t1) {
-                    return (expense.getMoney().subtract(t1.getMoney())).intValue() >= 0 ? -1 : 1;
+                    BigDecimal[] allValueMoney = new BigDecimal[]{valueUSD, valueEUR, expense.getMoney()};
+
+                    BigDecimal bigDecimalFIRST = valueToCurrentValue.convertValute("RUB", allValueMoney, expense.getCurrency().name());
+                    Log.d("sortSignal11", bigDecimalFIRST.toString());
+                    allValueMoney[2] = t1.getMoney();
+                    BigDecimal bigDecimalSECOND = valueToCurrentValue.convertValute("RUB", allValueMoney, t1.getCurrency().name());
+                    Log.d("sortSignal22", bigDecimalSECOND.toString());
+
+                    return (bigDecimalFIRST.subtract(bigDecimalSECOND)).intValue() >= 0 ? -1 : 1;
                 }
             });
             mAdapter.notifyDataSetChanged();
