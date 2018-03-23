@@ -11,7 +11,7 @@ public abstract class BasePage extends Fragment implements ObservableArrayList.O
 
     protected List<Expense> expenseList;
     protected ObservableArrayList<Expense> expenses;
-    protected Valute[] valutes;
+    public Valute[] valutes;
 
     public void setExpenses(ObservableArrayList<Expense> expenses) {
         this.expenses = expenses;

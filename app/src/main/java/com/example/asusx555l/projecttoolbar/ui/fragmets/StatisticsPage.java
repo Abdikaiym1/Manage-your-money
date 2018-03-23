@@ -30,7 +30,7 @@ import java.util.Objects;
 import static java.lang.Math.abs;
 
 
-public class StatisticsPage extends BasePage implements XMLParser.SendResult , NotifyDialogFragment.RateDialogListener{
+public class StatisticsPage extends BasePage {
 
     private static final String DATE = "dd-MM-yyyy";
     private static final String USD = "USD";
@@ -55,7 +55,6 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult , N
     private RadioButton radioButtonRUB;
     private String curVaute = RUB;
     private enum StateXML {IOException}
-    private StateXML stateXML;
 
     private BigDecimal[] dwmMoneyLeave = {BigDecimal.ZERO, BigDecimal.ZERO, BigDecimal.ZERO};
     private BigDecimal allTimeMoney = BigDecimal.ZERO;
@@ -90,7 +89,6 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult , N
 
         expenseList = new ArrayList<>();
 
-        xmlParser();
         radioButtonUSD.setOnClickListener(radioButtonClickVaute);
         radioButtonEUR.setOnClickListener(radioButtonClickVaute);
         radioButtonRUB.setOnClickListener(radioButtonClickVaute);
@@ -171,50 +169,6 @@ public class StatisticsPage extends BasePage implements XMLParser.SendResult , N
             allTimeMoney = allTimeMoney.subtract(curMoney);
             textMoneyAll.setText(String.valueOf(allTimeMoney));
         }
-    }
-
-    private void xmlParser() {
-        XMLParser xmlParser = new XMLParser(StatisticsPage.this, simpleDate.format(new Date()));
-        xmlParser.execute();
-    }
-
-    @Override
-    public void send(Valute[] valutes) {
-        this.valutes = valutes;
-        
-    }
-
-    @Override
-    public void caution(String string) {
-        if (Objects.equals(string, StateXML.IOException.toString())) {
-            stateXML = StateXML.IOException;
-        }
-        openDialog();
-    }
-
-    @Override
-        public void applyRate(String valueUSD, String valueEUR) {
-        if (valueEUR.isEmpty() || valueUSD.isEmpty()) {
-            NotifyDialogFragment notifyDialogFragment = new NotifyDialogFragment(this);
-            notifyDialogFragment.setCancelable(false);
-            notifyDialogFragment.show(getFragmentManager(), "NotifyDialogFragment");
-            Toast.makeText(getContext(), R.string.caution_alert_dialog, Toast.LENGTH_SHORT).show();
-        } else {
-            valutes = new Valute[]{new Valute("USD", valueUSD), new Valute("EUR", valueEUR)};
-        }
-    }
-
-    @Override
-    public void isDefaultRate(boolean check) {
-        if (check) valutes = new Valute[]{new Valute("USD", "56,4334"), new Valute("EUR", "68,8826")};
-    }
-
-
-    public void openDialog() {
-        NotifyDialogFragment notifyDialogFragment = new NotifyDialogFragment(this);
-        notifyDialogFragment.setCancelable(false);
-        notifyDialogFragment.show(getFragmentManager(), "NotifyDialogFragment");
-
     }
 
     @Override
